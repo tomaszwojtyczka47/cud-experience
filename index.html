@@ -38,6 +38,27 @@ gtag('config', 'G-SQ21EGMK7H');
 </head>
 <body class="cud">
 
+<!-- ================= LOADER ================= -->
+<div id="cud-loader" class="cud-loader" aria-hidden="true">
+<svg class="cud-loader-mark" viewBox="40 8 220 130" focusable="false">
+<path class="lg-arc" d="M42 92 A128 128 0 0 1 258 92" stroke-width="2"/>
+<circle class="lg-dot" cx="150" cy="24" r="3.4"/>
+<path class="lg-sun" d="M127 90 A23 23 0 0 1 173 90" stroke-width="2"/>
+<g transform="translate(0,92)">
+<g class="lg-wave" stroke-width="2">
+<path d="M56 15 C82 5 108 23 136 16 C158 10 178 21 196 17"/>
+<path d="M46 26 C78 15 110 34 144 26 C166 21 184 27 198 24"/></g>
+<path class="lg-stem" d="M198 24 C216 24 238 18 258 2" stroke-width="1.8"/>
+<g class="lg-leaf">
+<g transform="translate(203,26) rotate(30)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g>
+<g transform="translate(211,19) rotate(-34)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g>
+<g transform="translate(221,23) rotate(26)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g>
+<g transform="translate(229,15) rotate(-38)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g>
+<g transform="translate(240,17) rotate(22)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g>
+<g transform="translate(246,8) rotate(-44)"><path d="M0 0C3-4.4 8.6-4.8 12-1 7.6 3.4 3 3.4 0 0Z"/></g></g></g>
+</svg>
+</div>
+
 <!-- ================= HERO ================= -->
 <div class="cud cud-full cud-hero">
 <div class="cud-hero-bg"><img src="assets/images/01-hero.jpg" alt="Powerful ocean waves glowing under a golden sunset sky"></div>
@@ -123,8 +144,8 @@ gtag('config', 'G-SQ21EGMK7H');
 <!-- ================= ABOUT ================= -->
 <div class="cud cud-sec cud-about" id="about">
 <div class="cud-in cud-about-in">
-<div class="cud-ph cud-about-img"><img src="assets/images/02-about.jpg" alt="Travellers sharing a street-food breakfast at a roadside table in Hoi An, Vietnam"></div>
-<div>
+<div class="cud-ph cud-about-img cud-reveal"><img src="assets/images/02-about.jpg" alt="Travellers sharing a street-food breakfast at a roadside table in Hoi An, Vietnam"></div>
+<div class="cud-reveal cud-reveal-2">
 <p class="cud-eyebrow">About C.U.D.</p>
 <h2 class="cud-h2">More than travel.<br>It's a way of living.</h2>
 <p class="cud-p">C.U.D. is not about escaping your life.<br>It's about meaningful experiences and conversations,<br>slow mornings and deep connections.<br>We don't collect places.<br>We collect people and moments that<br>truly stay with you.</p>
@@ -141,27 +162,27 @@ gtag('config', 'G-SQ21EGMK7H');
 <hr><p class="cud-eyebrow">The C.U.D. Philosophy</p><hr>
 </div>
 <div class="cud-grid cud-pils">
-<div class="cud-pil">
+<div class="cud-pil cud-reveal cud-reveal-1">
 <div class="cud-pic"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 8c0 3 2 5 5 5s5-2 5-5c-2 1-3 0-5-3-2 3-3 4-5 3z"/></svg></div>
 <h4>Slow Living</h4>
 <p class="cud-p">We believe in slowing down<br>to live on purpose.</p>
 </div>
-<div class="cud-pil">
+<div class="cud-pil cud-reveal cud-reveal-2">
 <div class="cud-pic"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-9.5-9C1 7 3 4 6.5 4 9 4 11 6 12 8c1-2 3-4 5.5-4C21 4 23 7 21.5 11 19 15.5 12 20 12 20z"/></svg></div>
 <h4>Human Connection</h4>
 <p class="cud-p">Real people.<br>Real conversations.<br>Real moments.</p>
 </div>
-<div class="cud-pil">
+<div class="cud-pil cud-reveal cud-reveal-3">
 <div class="cud-pic"><svg viewBox="0 0 24 24"><path d="M12 21c4-2 6-5 6-9a6 6 0 0 0-12 0c0 4 2 7 6 9z"/></svg></div>
 <h4>Local Culture</h4>
 <p class="cud-p">We dive into the culture,<br>traditions and stories<br>that make a place unique.</p>
 </div>
-<div class="cud-pil">
+<div class="cud-pil cud-reveal cud-reveal-4">
 <div class="cud-pic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
 <h4>Meaningful Experiences</h4>
 <p class="cud-p">Not about doing more.<br>It's about doing what<br>truly stays with you.</p>
 </div>
-<div class="cud-pil">
+<div class="cud-pil cud-reveal cud-reveal-5">
 <div class="cud-pic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20c1-3.5 3.6-5.5 6.5-5.5s5.5 2 6.5 5.5"/></svg></div>
 <h4>Return to Yourself</h4>
 <p class="cud-p">We design experiences<br>that help you reconnect<br>with who you truly are.</p>
@@ -173,12 +194,12 @@ gtag('config', 'G-SQ21EGMK7H');
 <!-- ================= THREE WAYS ================= -->
 <div class="cud cud-sec" id="experiences">
 <div class="cud-in">
-<div class="cud-ways-head">
+<div class="cud-ways-head cud-reveal">
 <p class="cud-eyebrow">Three Ways to Experience C.U.D.</p>
 <h2 class="cud-h2">Different backgrounds. One heart.</h2>
 </div>
 <div class="cud-grid cud-waysg">
-<a class="cud-card" href="#">
+<a class="cud-card cud-reveal cud-reveal-1" href="#">
 <div class="cud-ph"><img src="assets/images/03-threeways.jpg" alt="Jungle-edge swimming pool at a small C.U.D. retreat in Asia"></div>
 <div class="cud-card-in">
 <div class="cud-ic"><svg viewBox="0 0 24 24"><path d="M12 2 3 7l9 5 9-5-9-5zM3 12l9 5 9-5M3 17l9 5 9-5"/></svg></div>
@@ -187,7 +208,7 @@ gtag('config', 'G-SQ21EGMK7H');
 <span class="cud-btn cud-btn-ghost">Learn more</span>
 </div>
 </a>
-<a class="cud-card cud-card-tall" href="#">
+<a class="cud-card cud-card-tall cud-reveal cud-reveal-2" href="#">
 <div class="cud-ph"><img src="assets/images/04-threeways.jpg" alt="Timber pavilions and garden path at a curated stay in the C.U.D. Collection"></div>
 <div class="cud-card-in">
 <div class="cud-ic"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10"/></svg></div>
@@ -196,7 +217,7 @@ gtag('config', 'G-SQ21EGMK7H');
 <span class="cud-btn cud-btn-ghost">Learn more</span>
 </div>
 </a>
-<a class="cud-card" href="#">
+<a class="cud-card cud-reveal cud-reveal-3" href="#">
 <div class="cud-ph"><img src="assets/images/05-threeways.jpg" alt="Sunset over the ocean on a tailor-made C.U.D. private journey"></div>
 <div class="cud-card-in">
 <div class="cud-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 15l2-6 6-2-2 6-6 2z"/></svg></div>
@@ -214,19 +235,19 @@ gtag('config', 'G-SQ21EGMK7H');
 <div class="cud-in">
 <p class="cud-eyebrow cud-up-head">Upcoming C.U.D. Experiences 2027</p>
 <div class="cud-grid cud-g4">
-<a class="cud-ev" href="#">
+<a class="cud-ev cud-reveal cud-reveal-1" href="#">
 <div class="cud-ph cud-ev-img"><img src="assets/images/06-hoian.jpg" alt="Red silk lanterns lighting a shopfront in the old town of Hoi An, Vietnam"></div>
 <div class="cud-ev-b"><h5>C.U.D. Hoi An Retreat</h5><p>Hoi An, Vietnam</p><p>20 Mar &ndash; 31 Mar 2027</p></div>
 </a>
-<a class="cud-ev" href="#">
+<a class="cud-ev cud-reveal cud-reveal-2" href="#">
 <div class="cud-ph cud-ev-img"><img src="assets/images/07-bali.jpg" alt="Terraced rice fields and palm trees in inland Bali, Indonesia"></div>
 <div class="cud-ev-b"><h5>C.U.D. Bali Experience</h5><p>Bali, Indonesia</p><p>June 2027</p></div>
 </a>
-<a class="cud-ev" href="#">
+<a class="cud-ev cud-reveal cud-reveal-3" href="#">
 <div class="cud-ph cud-ev-img"><img src="assets/images/08-surf.jpg" alt="Surfers carrying boards along the beach in Bali, Indonesia"></div>
 <div class="cud-ev-b"><h5>C.U.D. Surf &amp; Ride Bali</h5><p>Bali, Indonesia</p><p>June 2027</p></div>
 </a>
-<a class="cud-ev" href="#">
+<a class="cud-ev cud-reveal cud-reveal-4" href="#">
 <div class="cud-ph cud-ev-img"><img src="assets/images/09-kampot.jpg" alt="Ancient Khmer temple ruins near Kampot, Cambodia"></div>
 <div class="cud-ev-b"><h5>C.U.D. Kampot</h5><p>Kampot, Cambodia</p><p>December 2027</p></div>
 </a>
@@ -237,9 +258,9 @@ gtag('config', 'G-SQ21EGMK7H');
 
 <!-- ================= JOURNAL ================= -->
 <div class="cud cud-full cud-jr" id="journal">
-<div class="cud-ph cud-jr-img" role="img" aria-label="A handwoven bamboo basket in warm, soft light"><img src="assets/images/10-journal.jpg" alt="A handwoven bamboo basket in warm, soft light"></div>
+<div class="cud-ph cud-jr-img cud-reveal" role="img" aria-label="A handwoven bamboo basket in warm, soft light"><img src="assets/images/10-journal.jpg" alt="A handwoven bamboo basket in warm, soft light"></div>
 <div class="cud-jr-tx">
-<div class="cud-jr-in">
+<div class="cud-jr-in cud-reveal cud-reveal-2">
 <p class="cud-eyebrow">Shades of Human Life</p>
 <h2 class="cud-h2">Stories. Reflections. Emotions.</h2>
 <p class="cud-p">A journal of life, travel and the small moments<br>that shape who we are.<br>Words that stay. Just like the places we love.</p>
@@ -250,31 +271,31 @@ gtag('config', 'G-SQ21EGMK7H');
 
 <!-- ================= CARDS + COLLECTION ================= -->
 <div class="cud cud-full cud-duo">
-<div class="cud-duo-tx">
+<div class="cud-duo-tx cud-reveal cud-reveal-1">
 <p class="cud-eyebrow">Conversation Cards&trade;</p>
 <h3 class="cud-h3">Meaningful conversations<br>that create real connections.</h3>
 <p class="cud-p">Beautifully designed cards<br>to spark deeper talks &mdash;<br>with yourself or with others.</p>
 <a class="cud-btn" href="#">Discover the cards</a>
 </div>
-<div class="cud-ph cud-duo-img"><img src="assets/images/11-conversationcards.jpg" alt="A cup of tea on a wooden table overlooking green rice fields"></div>
-<div class="cud-duo-tx">
+<div class="cud-ph cud-duo-img cud-reveal cud-reveal-2"><img src="assets/images/11-conversationcards.jpg" alt="A cup of tea on a wooden table overlooking green rice fields"></div>
+<div class="cud-duo-tx cud-reveal cud-reveal-3">
 <p class="cud-eyebrow">Curated by C.U.D.</p>
 <h3 class="cud-h3">Places with soul.<br>Personally curated by me.</h3>
 <p class="cud-p">Every place in the collection is personally visited,<br>experienced and chosen for its<br>beauty and energy.</p>
 <a class="cud-btn" href="#">Explore the collection</a>
 </div>
-<div class="cud-ph cud-duo-img"><img src="assets/images/12-curatedbycud.jpg" alt="Poolside loungers and tropical planting at a place curated by C.U.D."></div>
+<div class="cud-ph cud-duo-img cud-reveal cud-reveal-4"><img src="assets/images/12-curatedbycud.jpg" alt="Poolside loungers and tropical planting at a place curated by C.U.D."></div>
 </div>
 
 <!-- ================= NEWSLETTER ================= -->
 <div class="cud cud-full cud-nl" id="apply">
 <div class="cud-nl-in">
-<div class="cud-nl-l">
+<div class="cud-nl-l cud-reveal">
 <p class="cud-eyebrow cud-nl-eb">The Journey</p>
 <h2 class="cud-h2 cud-nl-h">Slow down. Stay inspired.</h2>
 <p class="cud-nl-p">Be the first to know about new experiences,<br>reflections and stories.</p>
 </div>
-<div class="cud-nl-r">
+<div class="cud-nl-r cud-reveal cud-reveal-2">
 <form class="cud-nl-form" onsubmit="return false;">
 <label class="cud-nl-label" for="cud-nl-email">Your email address</label>
 <input class="cud-nl-field" id="cud-nl-email" name="email" type="email" placeholder="Your email address" autocomplete="email">
@@ -320,5 +341,6 @@ gtag('config', 'G-SQ21EGMK7H');
 
 <script src="assets/js/site.js"></script>
 <script src="assets/js/ga4-events.js"></script>
+<script src="assets/js/reveal.js"></script>
 </body>
 </html>

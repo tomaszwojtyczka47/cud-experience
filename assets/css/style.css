@@ -80,7 +80,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 /* ---- THREE WAYS --------------------------------------------------------- */
 .cud-ways-head{text-align:center;margin-bottom:46px}
 .cud-waysg{grid-template-columns:repeat(3,1fr)}
-.cud-card{position:relative;border-radius:2px;overflow:hidden;color:#fff;min-height:232px;display:flex}
+.cud-card{position:relative;border-radius:2px;overflow:hidden;color:#fff;min-height:232px;display:flex;text-decoration:none}
 .cud-card-tall{min-height:268px}
 .cud-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,11,.54) 0%,rgba(18,16,11,.34) 42%,rgba(18,16,11,.62) 100%);z-index:1;transition:background .3s}
 .cud-card:hover:before{background:linear-gradient(180deg,rgba(18,16,11,.38) 0%,rgba(18,16,11,.18) 42%,rgba(18,16,11,.46) 100%)}
@@ -95,7 +95,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 /* ---- UPCOMING ------------------------------------------------------------ */
 .cud-up{padding:70px 0 78px}
 .cud-up-head{text-align:center;margin-bottom:40px}
-.cud-ev{background:#fff;border:1px solid var(--line)}
+.cud-ev{display:block;background:#fff;border:1px solid var(--line);text-decoration:none}
 .cud-ev-img{aspect-ratio:16/10}
 .cud-ev-b{padding:16px 18px 20px}
 .cud-ev-b h5{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 6px}
@@ -176,3 +176,36 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 
 @media (max-width:980px){.cud-g5{grid-template-columns:repeat(2,1fr)}.cud-g4{grid-template-columns:repeat(2,1fr)}.cud-g3{grid-template-columns:1fr}.cud-g2{grid-template-columns:1fr}.cud-sec{padding:52px 0}}
 @media (max-width:560px){.cud-g5,.cud-g4{grid-template-columns:1fr}.cud-in{padding:0 20px}}
+
+/* ---- PAGE LOADER -----------------------------------------------------
+   Full-screen overlay with the C.U.D. mark, shown from first paint (pure
+   CSS, no flash) and dismissed by reveal.js once the page has actually
+   finished loading. Capped at 2.5s so a slow connection never traps a
+   visitor behind it. ------------------------------------------------- */
+html.cud-loading{overflow:hidden}
+.cud-loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--dark);opacity:1;visibility:visible;transition:opacity .6s ease,visibility 0s linear 0s}
+.cud-loader.is-hidden{opacity:0;visibility:hidden;transition:opacity .6s ease,visibility 0s linear .6s}
+.cud-loader-mark{width:60px;height:auto;opacity:0;animation:cud-loader-in 1s ease .1s forwards}
+.cud-loader-mark .lg-arc,.cud-loader-mark .lg-sun{stroke:#F2EFE9;fill:none;stroke-linecap:round}
+.cud-loader-mark .lg-dot{fill:#F2EFE9}
+.cud-loader-mark .lg-wave{stroke:#F2EFE9;fill:none;stroke-linecap:round}
+.cud-loader-mark .lg-stem{stroke:#B7AF9E;fill:none;stroke-linecap:round}
+.cud-loader-mark .lg-leaf{fill:#B7AF9E}
+@keyframes cud-loader-in{0%{opacity:0;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+
+/* ---- SCROLL REVEAL -----------------------------------------------------
+   Sections fade and rise into place as they near the viewport (see
+   reveal.js). Numbered variants stagger siblings in the same row/grid
+   so a group of cards settles in left-to-right rather than all at once. */
+.cud-reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.cud-reveal.is-visible{opacity:1;transform:translateY(0)}
+.cud-reveal-2{transition-delay:.1s}
+.cud-reveal-3{transition-delay:.2s}
+.cud-reveal-4{transition-delay:.3s}
+.cud-reveal-5{transition-delay:.4s}
+
+@media (prefers-reduced-motion:reduce){
+.cud-loader{transition:none}
+.cud-loader-mark{animation:none;opacity:1}
+.cud-reveal{opacity:1;transform:none;transition:none}
+}
