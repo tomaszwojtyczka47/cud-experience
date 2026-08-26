@@ -36,7 +36,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .cud-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.52) 0%,rgba(0,0,0,.24) 36%,rgba(0,0,0,.28) 60%,rgba(0,0,0,.54) 100%),radial-gradient(ellipse 58% 44% at 50% 45%,rgba(0,0,0,.46),rgba(0,0,0,0) 72%)}
 .cud-nav,.cud-hero-mid{position:relative;z-index:2}
 .cud-nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;gap:24px;flex-wrap:wrap}
-.cud-nav ul{display:flex;align-items:center;gap:26px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+.cud-nav ul{display:flex;align-items:center;justify-content:center;gap:26px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
 .cud-nav ul a{color:#fff;text-decoration:none;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;opacity:.92;padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color .25s;text-shadow:0 1px 10px rgba(0,0,0,.45)}
 .cud-nav ul a:hover{border-color:rgba(255,255,255,.85)}
 .cud-nav ul a.on{background:rgba(0,0,0,.34);padding:9px 15px;border:0}
