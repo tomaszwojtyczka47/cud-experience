@@ -1,0 +1,4 @@
+Contact: mailto:contact@cudexperience.com
+Expires: 2027-08-26T00:00:00.000Z
+Preferred-Languages: en, pl
+Canonical: https://cudexperience.com/.well-known/security.txt
