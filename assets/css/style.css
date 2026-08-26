@@ -176,6 +176,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .cud-pv-addr{background:var(--sand2);padding:14px 18px;font-style:normal}
 @media (max-width:600px){.cud-pv-h{margin-top:32px;padding-top:18px}}
 
+.cud-404{text-align:center}
+.cud-404-logo{display:inline-block;margin-bottom:30px;--lg-gold:var(--ink);--lg-green:var(--olive);--lg-sage:var(--olive2)}
+.cud-404-p{max-width:440px;margin-left:auto;margin-right:auto}
+.cud-404-cta{margin-top:34px}
+
 @media (max-width:980px){.cud-g5{grid-template-columns:repeat(2,1fr)}.cud-g4{grid-template-columns:repeat(2,1fr)}.cud-g3{grid-template-columns:1fr}.cud-g2{grid-template-columns:1fr}.cud-sec{padding:52px 0}}
 @media (max-width:560px){.cud-g5,.cud-g4{grid-template-columns:1fr}.cud-in{padding:0 20px}}
 
