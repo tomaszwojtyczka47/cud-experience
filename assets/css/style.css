@@ -176,7 +176,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .cud-pv-addr{background:var(--sand2);padding:14px 18px;font-style:normal}
 @media (max-width:600px){.cud-pv-h{margin-top:32px;padding-top:18px}}
 
-.cud-404{text-align:center}
+.cud-404{text-align:center;min-height:100vh;min-height:100svh;padding-top:32px;padding-bottom:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box}
 .cud-404-logo{display:inline-block;margin-bottom:30px;--lg-gold:var(--ink);--lg-green:var(--olive);--lg-sage:var(--olive2)}
 .cud-404-p{max-width:440px;margin-left:auto;margin-right:auto}
 .cud-404-cta{margin-top:34px}
