@@ -12,7 +12,7 @@ if(j){ ev('newsletter_join_click'); return; }
 var a=e.target.closest('a'); if(!a) return;
 var href=a.getAttribute('href')||'';
 if(a.classList.contains('cud-card')){ ev('experience_card_click',{card:txt(a.querySelector('.cud-h3'))}); return; }
-if(a.classList.contains('cud-ev')){ ev('upcoming_trip_click',{trip:txt(a.querySelector('h5'))}); return; }
+if(a.classList.contains('cud-ev')){ ev('upcoming_trip_click',{trip:txt(a.querySelector('h3'))}); return; }
 if(a.closest('.cud-ft-ic')){ ev('social_click',{network:a.getAttribute('aria-label')||''}); return; }
 if(a.closest('.cud-nav')){ ev('nav_click',{link_text:txt(a),target:href}); return; }
 if(a.closest('.cud-ft-nav')){ ev('footer_nav_click',{link_text:txt(a)}); return; }
