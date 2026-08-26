@@ -1,0 +1,16 @@
+{
+"name": "C.U.D. Experience - Curated Human Experiences",
+"short_name": "C.U.D.",
+"description": "Small-group slow travel retreats and tailor-made journeys in Bali, Vietnam and Cambodia.",
+"start_url": "/",
+"scope": "/",
+"display": "browser",
+"lang": "en",
+"background_color": "#F2EFE9",
+"theme_color": "#191713",
+"icons": [
+{ "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+{ "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" },
+{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+]
+}
