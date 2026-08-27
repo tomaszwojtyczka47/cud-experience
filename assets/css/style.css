@@ -176,7 +176,7 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-ft-soc{text-align:right}
 .cud-ft-sh{color:#B7AF9E;font-size:9.5px;letter-spacing:.2em}
 .cud-ft-ic{display:flex;gap:16px;justify-content:flex-end;margin-top:14px}
-.cud-ft-ic a{color:#CFC8B8;display:inline-flex;transition:color .22s,transform .22s}
+.cud-ft-ic a{color:#CFC8B8;display:inline-flex;align-items:center;justify-content:center;padding:8px;margin:-8px;transition:color .22s,transform .22s}
 .cud-ft-ic a:hover{transform:translateY(-2px)}
 .cud-ft-ic a:hover{color:#fff}
 .cud-ft-ic svg{width:19px;height:19px;display:block}
