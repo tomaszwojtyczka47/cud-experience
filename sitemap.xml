@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://cudexperience.com/</loc><lastmod>2026-08-26</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<url><loc>https://cudexperience.com/</loc><lastmod>2026-08-27</lastmod>
+<image:image><image:loc>https://cudexperience.com/assets/images/01-hero.jpg</image:loc><image:title>C.U.D. Experience</image:title><image:caption>Powerful ocean waves glowing under a golden sunset sky</image:caption></image:image>
+</url>
 <url><loc>https://cudexperience.com/privacy/</loc><lastmod>2026-08-26</lastmod></url>
 <url><loc>https://cudexperience.com/terms/</loc><lastmod>2026-08-26</lastmod></url>
-<url><loc>https://cudexperience.com/experiences/</loc><lastmod>2026-08-27</lastmod></url>
-<url><loc>https://cudexperience.com/experiences/hoi-an/</loc><lastmod>2026-08-27</lastmod></url>
+<url><loc>https://cudexperience.com/experiences/</loc><lastmod>2026-08-27</lastmod>
+<image:image><image:loc>https://cudexperience.com/assets/images/06-hoian.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>Red silk lanterns lighting a shopfront in the old town of Hoi An, Vietnam</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/07-bali.jpg</image:loc><image:title>C.U.D. Bali Experience</image:title><image:caption>Terraced rice fields and palm trees in inland Bali, Indonesia</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/08-surf.jpg</image:loc><image:title>C.U.D. Surf &amp; Ride Bali</image:title><image:caption>Surfers carrying boards along the beach in Bali, Indonesia</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/09-kampot.jpg</image:loc><image:title>C.U.D. Kampot</image:title><image:caption>Ancient Khmer temple ruins near Kampot, Cambodia</image:caption></image:image>
+</url>
+<url><loc>https://cudexperience.com/experiences/hoi-an/</loc><lastmod>2026-08-27</lastmod>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-hero.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>A lit pedestrian bridge over the river in Hoi An at dusk, framed by red silk lanterns</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-place.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>Quiet rattan-furnished terrace overlooking tropical greenery at the Hoi An experience</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-morning.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>Warm lounge with rattan pendant lights and tea, part of the Hoi An experience's morning ritual</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-yoga.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>Group aerial yoga session overlooking rice fields near Hoi An</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-evening.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>Silk lanterns glowing at dusk over the river in Hoi An</image:caption></image:image>
+<image:image><image:loc>https://cudexperience.com/assets/images/hoian-closing.jpg</image:loc><image:title>C.U.D. Hoi An Experience</image:title><image:caption>A lantern-lit boat moored at a wooden pier on the river in Hoi An at dusk</image:caption></image:image>
+</url>
 </urlset>
