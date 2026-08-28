@@ -50,6 +50,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .cud-lang a{color:inherit}
 .cud-lang span[aria-hidden]{opacity:.55}
 .cud-lang-on{opacity:.55}
+.cud-menu-btn{display:none;background:none;border:0;padding:0;cursor:pointer;width:26px;height:20px;position:relative;z-index:3;flex:none}
+.cud-menu-btn span{position:absolute;left:0;right:0;top:9px;height:2px;background:#fff;border-radius:1px;transition:opacity .2s ease}
+.cud-menu-btn span::before,.cud-menu-btn span::after{content:'';position:absolute;left:0;right:0;height:2px;background:#fff;border-radius:1px;transition:transform .25s ease}
+.cud-menu-btn span::before{top:-8px}
+.cud-menu-btn span::after{top:8px}
+.cud-nav-open .cud-menu-btn span{opacity:0}
+.cud-nav-open .cud-menu-btn span::before{transform:translateY(8px) rotate(45deg)}
+.cud-nav-open .cud-menu-btn span::after{transform:translateY(-8px) rotate(-45deg)}
+@media (max-width:820px){
+.cud-menu-btn{display:block}
+.cud-nav ul{display:none;position:fixed;inset:0;flex-direction:column;justify-content:center;align-items:center;gap:28px;background:rgba(20,17,13,.97);margin:0;padding:0;z-index:2}
+.cud-nav-open ul{display:flex}
+.cud-nav ul a{font-size:13px}
+.cud-nav ul a.on{padding:10px 18px}
+}
 .cud-hero-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 24px 90px}
 .cud-hr{width:140px;height:1px;background:rgba(255,255,255,.55);border:0;margin:28px auto 22px}
 .cud-hero-claim{font-family:var(--serif);font-size:clamp(19px,2.2vw,25px);line-height:1.55;letter-spacing:.05em;margin:0 0 30px;text-shadow:0 2px 22px rgba(0,0,0,.5)}
@@ -70,7 +85,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .cud-logo-word-lg{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.1vw,64px);letter-spacing:.14em;text-indent:.14em;line-height:1;margin:-2px 0 -1px;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5)}
 .cud-logo-motto{font-size:clamp(7.5px,.8vw,9.5px);letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;margin:14px 0 0;text-shadow:0 1px 14px rgba(0,0,0,.65)}
 .cud-logo-script{font-family:'Parisienne',cursive;font-size:clamp(18px,2vw,25px);margin:6px 0 0;line-height:1.2;text-shadow:0 1px 14px rgba(0,0,0,.65)}
-@media (max-width:820px){.cud-nav{justify-content:center}.cud-hero{min-height:76vh}.cud-logo-stack{width:min(74vw,280px)}}
+@media (max-width:820px){.cud-hero{min-height:76vh}.cud-logo-stack{width:min(74vw,280px)}}
 @media (max-height:540px) and (orientation:landscape){.cud-hero{min-height:auto}.cud-hero-mid{padding:24px 20px 32px}.cud-logo-stack{width:min(46vw,250px)}}
 
 /* ---- ABOUT ------------------------------------------------------------ */
@@ -312,4 +327,5 @@ html{scroll-behavior:auto}
 .cud-reveal{opacity:1;transform:none;transition:none}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
 .cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-card,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link{transition:none}
+.cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
 }

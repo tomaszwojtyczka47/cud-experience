@@ -15,4 +15,27 @@ if(s)s.textContent=isPl?'Dzi\u0119kujemy! Zapisy nie s\u0105 jeszcze aktywne \u2
 /* Copyright year keeps itself current without ever needing an edit. */
 var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
+
+/* Mobile nav: hamburger toggles the existing <ul> as a full-screen menu. */
+var navs=document.querySelectorAll('.cud-nav');
+navs.forEach(function(nav){
+var btn=nav.querySelector('.cud-menu-btn');
+if(!btn)return;
+function closeMenu(){
+nav.classList.remove('cud-nav-open');
+btn.setAttribute('aria-expanded','false');
+document.body.style.overflow='';
+}
+btn.addEventListener('click',function(){
+var open=nav.classList.toggle('cud-nav-open');
+btn.setAttribute('aria-expanded',open?'true':'false');
+document.body.style.overflow=open?'hidden':'';
+});
+nav.querySelectorAll('ul a').forEach(function(a){
+a.addEventListener('click',closeMenu);
+});
+document.addEventListener('keydown',function(e){
+if(e.key==='Escape')closeMenu();
+});
+});
 })();
