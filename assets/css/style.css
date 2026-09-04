@@ -87,6 +87,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,[
 .cud-logo-word-lg{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.1vw,64px);letter-spacing:.14em;text-indent:.14em;line-height:1;margin:-2px 0 -1px;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5)}
 .cud-logo-motto{font-size:clamp(7.5px,.8vw,9.5px);letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;margin:14px 0 0;text-shadow:0 1px 14px rgba(0,0,0,.65)}
 .cud-logo-script{font-family:'Parisienne',cursive;font-size:clamp(18px,2vw,25px);margin:6px 0 0;line-height:1.2;text-shadow:0 1px 14px rgba(0,0,0,.65)}
+.cud-logo-script+.cud-btn{margin-top:28px}
 @media (max-width:820px){.cud-hero{min-height:76vh;min-height:76svh}.cud-logo-stack{width:min(74vw,280px)}}
 @media (max-height:540px) and (orientation:landscape){.cud-hero{min-height:auto}.cud-hero-mid{padding:24px 20px 32px}.cud-logo-stack{width:min(46vw,250px)}}
 
@@ -283,7 +284,7 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-xp-back:hover{color:#fff;border-color:#fff}
 .cud-hero-eyebrow{font-size:11px;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.85);margin:0 0 14px;text-shadow:0 1px 10px rgba(0,0,0,.45)}
 .cud-hero-h1{font-family:var(--serif);font-weight:400;font-size:clamp(32px,5vw,58px);letter-spacing:.03em;line-height:1.16;margin:0 0 6px;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5)}
-.cud-hero-meta{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:18px 0 30px;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.cud-hero-meta{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:18px 0 16px;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.45)}
 .cud-intro{max-width:640px;margin:0 auto;text-align:center}
 
 .cud-feat-grid{grid-template-columns:repeat(5,1fr);margin-top:46px}
@@ -323,7 +324,7 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 
 /* ---- HERO TAGLINE / SCARCITY (experience detail hero) --------------------- */
 .cud-hero-tagline{font-size:12px;letter-spacing:.05em;line-height:1.7;margin:14px 0 0;text-shadow:0 1px 14px rgba(0,0,0,.5)}
-.cud-hero-scarcity{font-size:10px;letter-spacing:.08em;margin:18px 0 0;color:rgba(255,255,255,.78);text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.cud-hero-scarcity{font-size:13px;letter-spacing:.05em;margin:0;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.45)}
 
 /* ---- PRIVATE SPACES / PRICING CARDS --------------------------------------- */
 .cud-space-grid{margin-top:34px}
