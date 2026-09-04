@@ -17,7 +17,7 @@ var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
 
 /* Mobile nav: hamburger toggles the existing <ul> as a full-screen menu. */
-var navs=document.querySelectorAll('.cud-nav');
+var navs=document.querySelectorAll('.cud-nav, .cud-pv-nav');
 navs.forEach(function(nav){
 var btn=nav.querySelector('.cud-menu-btn');
 if(!btn)return;
