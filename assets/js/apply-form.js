@@ -60,8 +60,11 @@
       return;
     }
 
-    var turnstileEl = form.querySelector('[name="cf-turnstile-response"]');
-    var turnstileToken = turnstileEl ? turnstileEl.value : '';
+    var turnstileToken = window.turnstile ? window.turnstile.getResponse() : '';
+    if (!turnstileToken) {
+      var turnstileEl = form.querySelector('[name="cf-turnstile-response"]');
+      turnstileToken = turnstileEl ? turnstileEl.value : '';
+    }
     if (!turnstileToken) {
       showError();
       return;
