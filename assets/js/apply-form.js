@@ -60,6 +60,13 @@
       return;
     }
 
+    var turnstileEl = form.querySelector('[name="cf-turnstile-response"]');
+    var turnstileToken = turnstileEl ? turnstileEl.value : '';
+    if (!turnstileToken) {
+      showError();
+      return;
+    }
+
     var payload = { Language: isPl ? 'PL' : 'EN' };
     Object.keys(FIELD_MAP).forEach(function (id) { payload[FIELD_MAP[id]] = valueOf(id); });
     Object.keys(CHECKBOX_MAP).forEach(function (id) {
@@ -67,6 +74,7 @@
       payload[CHECKBOX_MAP[id]] = !!(el && el.checked);
     });
     payload.website = valueOf('website');
+    payload.turnstileToken = turnstileToken;
 
     form.classList.add('cud-form-submitting');
     if (submitBtn) submitBtn.setAttribute('aria-disabled', 'true');
@@ -83,11 +91,13 @@
       } else {
         form.classList.remove('cud-form-submitting');
         if (submitBtn) submitBtn.removeAttribute('aria-disabled');
+        if (window.turnstile) window.turnstile.reset();
         showError();
       }
     }).catch(function () {
       form.classList.remove('cud-form-submitting');
       if (submitBtn) submitBtn.removeAttribute('aria-disabled');
+      if (window.turnstile) window.turnstile.reset();
       showError();
     });
   });

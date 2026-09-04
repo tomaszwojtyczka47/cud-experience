@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4Sw3mfSWcYP8h2p1zf8gm588cwfHhX6PTf6raRqk4Vg=' 'sha256-JZD0/VAFZ2jNaYbPFiX38w9/Vi05c2HOlmKXaVVMWtQ=' 'sha256-zaFjfZUIfF2lGlX84B0xH3NPY/I8KPm5z5Wxww2fMOw=' https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; style-src 'self' 'unsafe-inline' https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; font-src 'self' https://fonts.gstatic.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; img-src 'self' data: https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4Sw3mfSWcYP8h2p1zf8gm588cwfHhX6PTf6raRqk4Vg=' 'sha256-JZD0/VAFZ2jNaYbPFiX38w9/Vi05c2HOlmKXaVVMWtQ=' 'sha256-zaFjfZUIfF2lGlX84B0xH3NPY/I8KPm5z5Wxww2fMOw=' https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; font-src 'self' https://fonts.gstatic.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; img-src 'self' data: https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>(function(){try{if(window.top!==window.self){window.top.location.href=window.self.location.href}}catch(e){document.documentElement.style.display='none'}})();window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':2000});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -41,6 +41,7 @@
 <meta name="robots" content="noindex,follow">
 
 <script src="https://app.secureprivacy.ai/script/6a7de1516907d90b3bdd6239.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SQ21EGMK7H"></script>
 <script>
@@ -310,6 +311,8 @@ gtag('config', 'G-SQ21EGMK7H');
 </div>
 
 <div class="cud-form-error" role="alert"></div>
+
+<div class="cf-turnstile" data-sitekey="0x4AAAAAAEnjbjjpm0FyQwcT"></div>
 
 <div class="cud-form-submit">
 <button class="cud-btn" type="submit">Send Application</button>

@@ -9,7 +9,8 @@
  * validation + spam filtering, and writes one record into Airtable.
  *
  * Required Worker Secrets (set via the Cloudflare dashboard, never in this
- * file or in git): AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE.
+ * file or in git): AIRTABLE_TOKEN, AIRTABLE_BASE_ID, AIRTABLE_TABLE,
+ * TURNSTILE_SECRET_KEY.
  *
  * Airtable field names this expects to already exist in the target table
  * are documented in full in the project plan / CLAUDE.md — every key in
@@ -54,9 +55,30 @@ export default {
       return json({ ok: true });
     }
 
+    if (!data.turnstileToken) {
+      return json({ ok: false, error: "missing_turnstile_token" }, 400);
+    }
+
+    const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: env.TURNSTILE_SECRET_KEY,
+        response: data.turnstileToken,
+        remoteip: request.headers.get("CF-Connecting-IP") || ""
+      })
+    });
+    const verifyBody = await verifyRes.json();
+    if (!verifyBody.success) {
+      return json({ ok: false, error: "turnstile_failed" }, 403);
+    }
+
     for (const key of REQUIRED_FIELDS) {
       if (!data[key] || String(data[key]).trim() === "") {
         return json({ ok: false, error: "missing_field", field: key }, 400);
+      }
+      if (String(data[key]).length > 5000) {
+        return json({ ok: false, error: "field_too_long", field: key }, 400);
       }
     }
 
