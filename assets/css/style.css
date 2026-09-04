@@ -212,6 +212,10 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-pv-row{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .cud-pv-row .cud-pv-back{margin-bottom:0}
 .cud-lang-lt{display:flex;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:34px}
+.cud-pv-nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin:-16px 0 34px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.cud-pv-nav a{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease}
+.cud-pv-nav a:hover{color:var(--ink);border-color:var(--line)}
+.cud-pv-nav a[aria-current="page"]{color:var(--ink);border-color:var(--olive)}
 .cud-lang-lt a{color:var(--ink2);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .25s,color .25s}
 .cud-lang-lt a:hover{color:var(--ink);border-color:var(--line)}
 .cud-lang-lt span[aria-hidden]{opacity:.55}
