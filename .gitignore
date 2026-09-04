@@ -1,0 +1,5 @@
+# Internal ops notes — contains infrastructure/security operational detail
+# (WAF thresholds, registrar/account specifics, incident history) that has
+# no reason to be visible in this public repo. Stays on disk for local
+# Claude Code sessions; never pushed to GitHub.
+CLAUDE.md
