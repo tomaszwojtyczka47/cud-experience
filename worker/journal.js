@@ -17,13 +17,18 @@
  * category and never appear here, so no language filtering is needed):
  *   https://travelpixiefreak.com/category/shades-of-human-life/feed/
  *
+ * Deliberately kept at WordPress's default 10-most-recent items (the
+ * feed's native limit) rather than switching to the REST API's full
+ * per_page=100 listing — Piotr chose to keep the carousel to the 10
+ * newest posts rather than surface all 21 that exist upstream.
+ *
  * Response is cached at Cloudflare's edge (Cache API) for CACHE_TTL_
  * SECONDS so the upstream WordPress site is hit at most once per TTL
  * window regardless of visitor traffic on cudexperience.com.
  */
 
 const FEED_URL = "https://travelpixiefreak.com/category/shades-of-human-life/feed/";
-const CACHE_TTL_SECONDS = 3600; // 1 hour — new posts show up within an hour, not instantly, without hammering the upstream site on every visit.
+const CACHE_TTL_SECONDS = 3600; // 1 hour
 
 function stripCdata(s) {
   const m = s.match(/^<!\[CDATA\[([\s\S]*)\]\]>$/);
@@ -57,8 +62,6 @@ function parseItems(xml) {
     const link = tagValue(block, "link");
     const pubDate = tagValue(block, "pubDate");
     const excerpt = tagValue(block, "description");
-    // Only accept the real domain's own links — defence in depth in case
-    // the upstream feed is ever compromised or misconfigured.
     if (title && link && link.indexOf("https://travelpixiefreak.com/") === 0) {
       items.push({ title, link, pubDate, excerpt });
     }

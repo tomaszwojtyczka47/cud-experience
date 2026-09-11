@@ -74,6 +74,7 @@ return a;
 }
 
 function build(items){
+var viewport = root.querySelector('.cud-jrl-viewport');
 var track = root.querySelector('.cud-jrl-track');
 var prevBtn = root.querySelector('.cud-jrl-prev');
 var nextBtn = root.querySelector('.cud-jrl-next');
@@ -83,11 +84,25 @@ items.forEach(function(item){ track.appendChild(makeCard(item)); });
 
 var index = 0;
 var cardWidth = 0;
+var maxIndex = 0; // last index that still shows a full row of real cards - see measure()
 var paused = false;
 var timer = null;
 
+/* The CSS shows 1/2/3 cards at once depending on breakpoint
+   (.cud-jrl-card is 100%/50%/33.3333% wide - see style.css). Stepping
+   the index all the way to n-1 like a single-card carousel would, on
+   a 3-per-view layout, leave the last 1-2 slots trailing off the end
+   of the track with nothing to show - real, reported bug: after the
+   final real card ("Shades of Human Life #4" in the current 10-item
+   feed) the following slide(s) render blank instead of wrapping.
+   maxIndex stops advancing once one more step would no longer have a
+   full row of real cards behind it, so every position the carousel
+   can reach is always fully populated. */
 function measure(){
 cardWidth = track.children[0].getBoundingClientRect().width;
+var perView = cardWidth ? Math.max(1, Math.round(viewport.getBoundingClientRect().width / cardWidth)) : 1;
+maxIndex = Math.max(0, n - perView);
+if(index > maxIndex) index = maxIndex;
 }
 
 function setPosition(animate){
@@ -99,26 +114,28 @@ track.style.transition = '';
 }
 }
 
-/* index is kept in range with modulo, not by comparing against an
-   exact boundary value - a modulo always produces a valid 0..n-1
-   result no matter how far index has drifted for any reason, so
-   there's nothing here that timing, a missed event, or an unexpected
-   extra call could ever desync. The one move that visually wraps
-   (last card back to first, or first back to last) jumps instantly
-   instead of animating, since sliding the CSS transform the "short
-   way" across the wrap wouldn't traverse the real cards in between -
-   it would either jump immediately (no animation to skip) or, if
-   forced to animate, visibly race backward across the whole strip.
-   An instant cut once per lap reads as an intentional loop point
-   rather than a glitch. */
+/* Wraps at maxIndex/0 (the real usable range - see measure()) rather
+   than n-1/0, so the carousel never scrolls past the last full row of
+   real cards. The wrapping move (last position back to first, or
+   first back to last) jumps instantly instead of animating, since
+   sliding the CSS transform the "short way" across the wrap wouldn't
+   traverse the real cards in between - it would either jump
+   immediately (no animation to skip) or, if forced to animate,
+   visibly race backward across the whole strip. An instant cut once
+   per lap reads as an intentional loop point rather than a glitch. */
 function go(dir){
-var wrapping = (dir > 0 && index === n-1) || (dir < 0 && index === 0);
-index = ((index + dir) % n + n) % n;
+if(maxIndex <= 0) return;
+var wrapping = (dir > 0 && index >= maxIndex) || (dir < 0 && index <= 0);
+if(wrapping){
+index = dir > 0 ? 0 : maxIndex;
+} else {
+index += dir;
+}
 setPosition(!wrapping);
 }
 
 function startAutoplay(){
-if(reduceMotion || n<2) return;
+if(reduceMotion || maxIndex<=0) return;
 stopAutoplay();
 timer = setInterval(function(){ if(!paused) go(1); }, AUTOPLAY_MS);
 }
@@ -126,16 +143,25 @@ function stopAutoplay(){
 if(timer){ clearInterval(timer); timer = null; }
 }
 
+/* maxIndex depends on how many cards fit per view, which changes
+   across the 1/2/3-per-view breakpoints - so whether prev/next make
+   sense at all can change on resize too (e.g. all 10 cards might fit
+   in one row on a very wide screen). */
+function updateNavVisibility(){
+var canScroll = maxIndex > 0;
+prevBtn.hidden = !canScroll;
+nextBtn.hidden = !canScroll;
+}
+
 prevBtn.addEventListener('click', function(){ go(-1); startAutoplay(); });
 nextBtn.addEventListener('click', function(){ go(1); startAutoplay(); });
-if(n<2){ prevBtn.hidden = true; nextBtn.hidden = true; }
 
 root.addEventListener('mouseenter', function(){ paused = true; });
 root.addEventListener('mouseleave', function(){ paused = false; });
 root.addEventListener('focusin', function(){ paused = true; });
 root.addEventListener('focusout', function(){ paused = false; });
 
-window.addEventListener('resize', function(){ measure(); setPosition(false); });
+window.addEventListener('resize', function(){ measure(); setPosition(false); updateNavVisibility(); startAutoplay(); });
 
 /* Un-hide first, then measure: getBoundingClientRect() on a card that's
    still inside a hidden ancestor always reports 0 width (a [hidden]
@@ -149,6 +175,7 @@ root.hidden = false;
 if(fallback) fallback.hidden = true;
 measure();
 setPosition(false);
+updateNavVisibility();
 startAutoplay();
 }
 })();
