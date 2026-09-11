@@ -104,23 +104,24 @@ track.style.transition = '';
 }
 }
 
-/* Wrapping the index back into range is scheduled by time (a timeout
-   slightly longer than the CSS transition), not by listening for
-   'transitionend' - that event isn't guaranteed to fire (e.g. if a
-   transition gets interrupted, or in some backgrounded-tab cases),
-   and autoplay calls go() on its own timer indefinitely. A single
-   missed event would let the index drift past the real+clone range
-   on every subsequent tick and eventually scroll the carousel into
-   empty space. A timeout always fires, so this can't drift. */
-var wrapTimer = null;
+/* Wrapping the index back into range happens synchronously at the
+   start of the *next* go() call, not on a delayed timer keyed to the
+   transition finishing (via 'transitionend' or setTimeout). Autoplay
+   calls go() indefinitely on its own clock, so anything relying on a
+   fixed delay to line up with the animation is a matter of when, not
+   if, it drifts out of sync in some browser/tab-visibility condition
+   - already seen twice this session (a <dialog> 'close' event that
+   didn't fire, then this same setTimeout approach still drifting
+   under background-tab timer throttling). Checking synchronously
+   removes the timing dependency entirely: a clone slide is visually
+   identical to the real one it stands in for, so snapping to the real
+   index instantly, right before the new move applies, is invisible
+   and can never be skipped or arrive late. */
 function go(dir){
-index += dir;
-setPosition(true);
-clearTimeout(wrapTimer);
-wrapTimer = setTimeout(function(){
 if(index === n+1){ index = 1; setPosition(false); }
 else if(index === 0){ index = n; setPosition(false); }
-}, 650);
+index += dir;
+setPosition(true);
 }
 
 function startAutoplay(){
