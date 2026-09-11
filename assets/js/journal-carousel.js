@@ -39,13 +39,12 @@ if(isNaN(d.getTime())) return '';
 return d.toLocaleDateString(isPl?'pl-PL':'en-US', {year:'numeric', month:'long', day:'numeric'});
 }
 
-function makeCard(item, hiddenFromAT){
+function makeCard(item){
 var a = document.createElement('a');
 a.className = 'cud-jrl-card';
 a.href = item.link;
 a.target = '_blank';
 a.rel = 'noopener';
-if(hiddenFromAT){ a.setAttribute('aria-hidden','true'); a.tabIndex = -1; }
 
 var inner = document.createElement('span');
 inner.className = 'cud-jrl-card-in';
@@ -80,13 +79,9 @@ var prevBtn = root.querySelector('.cud-jrl-prev');
 var nextBtn = root.querySelector('.cud-jrl-next');
 var n = items.length;
 
-// [clone-of-last, ...real items..., clone-of-first] for a seamless
-// bidirectional infinite loop with only two extra DOM nodes.
-track.appendChild(makeCard(items[n-1], true));
-items.forEach(function(item){ track.appendChild(makeCard(item, false)); });
-track.appendChild(makeCard(items[0], true));
+items.forEach(function(item){ track.appendChild(makeCard(item)); });
 
-var index = 1; // first real item
+var index = 0;
 var cardWidth = 0;
 var paused = false;
 var timer = null;
@@ -104,24 +99,22 @@ track.style.transition = '';
 }
 }
 
-/* Wrapping the index back into range happens synchronously at the
-   start of the *next* go() call, not on a delayed timer keyed to the
-   transition finishing (via 'transitionend' or setTimeout). Autoplay
-   calls go() indefinitely on its own clock, so anything relying on a
-   fixed delay to line up with the animation is a matter of when, not
-   if, it drifts out of sync in some browser/tab-visibility condition
-   - already seen twice this session (a <dialog> 'close' event that
-   didn't fire, then this same setTimeout approach still drifting
-   under background-tab timer throttling). Checking synchronously
-   removes the timing dependency entirely: a clone slide is visually
-   identical to the real one it stands in for, so snapping to the real
-   index instantly, right before the new move applies, is invisible
-   and can never be skipped or arrive late. */
+/* index is kept in range with modulo, not by comparing against an
+   exact boundary value - a modulo always produces a valid 0..n-1
+   result no matter how far index has drifted for any reason, so
+   there's nothing here that timing, a missed event, or an unexpected
+   extra call could ever desync. The one move that visually wraps
+   (last card back to first, or first back to last) jumps instantly
+   instead of animating, since sliding the CSS transform the "short
+   way" across the wrap wouldn't traverse the real cards in between -
+   it would either jump immediately (no animation to skip) or, if
+   forced to animate, visibly race backward across the whole strip.
+   An instant cut once per lap reads as an intentional loop point
+   rather than a glitch. */
 function go(dir){
-if(index === n+1){ index = 1; setPosition(false); }
-else if(index === 0){ index = n; setPosition(false); }
-index += dir;
-setPosition(true);
+var wrapping = (dir > 0 && index === n-1) || (dir < 0 && index === 0);
+index = ((index + dir) % n + n) % n;
+setPosition(!wrapping);
 }
 
 function startAutoplay(){
