@@ -104,16 +104,24 @@ track.style.transition = '';
 }
 }
 
+/* Wrapping the index back into range is scheduled by time (a timeout
+   slightly longer than the CSS transition), not by listening for
+   'transitionend' - that event isn't guaranteed to fire (e.g. if a
+   transition gets interrupted, or in some backgrounded-tab cases),
+   and autoplay calls go() on its own timer indefinitely. A single
+   missed event would let the index drift past the real+clone range
+   on every subsequent tick and eventually scroll the carousel into
+   empty space. A timeout always fires, so this can't drift. */
+var wrapTimer = null;
 function go(dir){
 index += dir;
 setPosition(true);
-}
-
-track.addEventListener('transitionend', function(e){
-if(e.target !== track || e.propertyName !== 'transform') return;
+clearTimeout(wrapTimer);
+wrapTimer = setTimeout(function(){
 if(index === n+1){ index = 1; setPosition(false); }
 else if(index === 0){ index = n; setPosition(false); }
-});
+}, 650);
+}
 
 function startAutoplay(){
 if(reduceMotion || n<2) return;
