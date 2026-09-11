@@ -407,6 +407,28 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 /* ---- BIO (Created & Curated by Piotr) -------------------------------------- */
 .cud-bio-byline{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--ink2);margin:20px 0 0}
 
+/* ---- JOURNAL CAROUSEL (journal/index.html — synced from TravelPixieFreak,
+   see assets/js/journal-carousel.js) ------------------------------------- */
+.cud-jrl{position:relative;margin-top:44px}
+.cud-jrl-viewport{overflow:hidden}
+.cud-jrl-track{display:flex;transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+.cud-jrl-card{flex:0 0 100%;min-width:0;padding:0 10px;box-sizing:border-box;text-decoration:none;color:inherit;display:block}
+@media (min-width:701px){.cud-jrl-card{flex:0 0 50%}}
+@media (min-width:1024px){.cud-jrl-card{flex:0 0 33.3333%}}
+.cud-jrl-card-in{display:block;background:#fff;border:1px solid var(--line);padding:24px 22px;height:100%;box-sizing:border-box;transition:border-color .3s ease,box-shadow .3s ease}
+.cud-jrl-card:hover .cud-jrl-card-in,.cud-jrl-card:focus-visible .cud-jrl-card-in{border-color:var(--olive);box-shadow:0 14px 30px -18px rgba(43,40,34,.3)}
+.cud-jrl-card:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+.cud-jrl-date{display:block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px}
+.cud-jrl-h{display:block;font-family:var(--serif);font-weight:400;font-size:17px;margin:0 0 10px;line-height:1.35}
+.cud-jrl-ex{display:block;font-size:12px;font-weight:300;line-height:1.7;color:var(--ink2);margin:0 0 14px;overflow-wrap:break-word}
+.cud-jrl-link{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive)}
+.cud-jrl-btn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:999px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;padding:0;transition:border-color .25s ease,box-shadow .25s ease}
+.cud-jrl-btn:hover{border-color:var(--olive);box-shadow:0 8px 20px -10px rgba(43,40,34,.3)}
+.cud-jrl-btn svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.cud-jrl-prev{left:-14px}
+.cud-jrl-next{right:-14px}
+@media (max-width:900px){.cud-jrl-prev{left:0}.cud-jrl-next{right:0}}
+
 /* ---- FAQ (native details/summary accordion) -------------------------------- */
 .cud-faq{max-width:720px;margin:40px auto 0;padding:0;list-style:none;text-align:left}
 .cud-faq-item{border-top:1px solid var(--line)}
@@ -478,6 +500,6 @@ html{scroll-behavior:auto}
 .cud-loader-mark{animation:none;opacity:1}
 .cud-reveal{opacity:1;transform:none;transition:none}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
-.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-space-car-btn,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
+.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-space-car-btn,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join,.cud-jrl-track,.cud-jrl-card-in,.cud-jrl-btn{transition:none}
 .cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
 }
