@@ -440,6 +440,6 @@ html{scroll-behavior:auto}
 .cud-loader-mark{animation:none;opacity:1}
 .cud-reveal{opacity:1;transform:none;transition:none}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
-.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-card,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-input,.cud-textarea,.cud-space{transition:none}
+.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
 .cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
 }
