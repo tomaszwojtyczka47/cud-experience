@@ -332,13 +332,19 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-space-pair{grid-template-columns:repeat(2,1fr);max-width:620px;margin:34px auto 0}
 @media (max-width:900px){.cud-space-solo{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.cud-space-solo,.cud-space-pair{grid-template-columns:1fr}}
-.cud-space{background:#fff;border:1px solid var(--line);padding:26px 18px;text-align:center;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.cud-space{background:#fff;border:1px solid var(--line);text-align:center;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
 .cud-space:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(43,40,34,.35);border-color:var(--olive)}
+.cud-space-ph{aspect-ratio:1/1}
+.cud-space-ph img{transition:transform .6s cubic-bezier(.2,.7,.3,1)}
+.cud-space:hover .cud-space-ph img{transform:scale(1.06)}
+.cud-space-in{padding:20px 18px 26px}
 .cud-space-no{font-size:10px;letter-spacing:.14em;color:var(--ink2);margin:0 0 10px}
 .cud-space h3{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
 .cud-space p{font-size:12px;font-weight:300;line-height:1.7;color:var(--ink2);margin:0 0 14px;overflow-wrap:break-word}
+.cud-space-feat{font-size:9.5px;font-weight:300;letter-spacing:.03em;line-height:1.6;color:var(--ink2);margin:0 0 12px;overflow-wrap:break-word}
 .cud-space-meta{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:0 0 4px}
 .cud-space-price{font-family:var(--serif);font-size:18px;color:var(--ink);margin:0}
+.cud-space-unit{font-family:var(--sans);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){.cud-space{transition:none}}
 
 /* ---- INVESTMENT PRICE LIST ------------------------------------------------ */
@@ -440,6 +446,6 @@ html{scroll-behavior:auto}
 .cud-loader-mark{animation:none;opacity:1}
 .cud-reveal{opacity:1;transform:none;transition:none}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
-.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
+.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
 .cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
 }
