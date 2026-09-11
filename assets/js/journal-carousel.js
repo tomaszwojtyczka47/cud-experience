@@ -135,12 +135,18 @@ root.addEventListener('focusout', function(){ paused = false; });
 
 window.addEventListener('resize', function(){ measure(); setPosition(false); });
 
-requestAnimationFrame(function(){
-measure();
-setPosition(false);
+/* Un-hide first, then measure: getBoundingClientRect() on a card that's
+   still inside a hidden ancestor always reports 0 width (a [hidden]
+   subtree isn't rendered), and a requestAnimationFrame callback is the
+   wrong way to sequence around that - rAF is paused for backgrounded
+   tabs (e.g. a link opened in a new background tab), which would leave
+   the carousel permanently hidden behind the fallback panel for that
+   visitor. Reading layout geometry forces a synchronous reflow on its
+   own, so no rAF/timeout is needed here at all. */
 root.hidden = false;
 if(fallback) fallback.hidden = true;
+measure();
+setPosition(false);
 startAutoplay();
-});
 }
 })();
