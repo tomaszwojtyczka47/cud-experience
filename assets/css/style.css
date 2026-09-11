@@ -327,14 +327,10 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-hero-scarcity{font-size:13px;letter-spacing:.05em;margin:0;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.45)}
 
 /* ---- PRIVATE SPACES / PRICING CARDS --------------------------------------- */
-.cud-space-grid{margin-top:34px}
-.cud-space-solo{grid-template-columns:repeat(5,1fr)}
-.cud-space-pair{grid-template-columns:repeat(2,1fr);max-width:620px;margin:34px auto 0}
-@media (max-width:900px){.cud-space-solo{grid-template-columns:1fr 1fr}}
-@media (max-width:560px){.cud-space-solo,.cud-space-pair{grid-template-columns:1fr}}
-.cud-space{background:#fff;border:1px solid var(--line);text-align:center;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.cud-space-grid{margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center}
+.cud-space{background:#fff;border:1px solid var(--line);text-align:center;overflow:hidden;display:flex;flex-direction:column;flex:1 1 300px;min-width:300px;max-width:340px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
 .cud-space:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(43,40,34,.35);border-color:var(--olive)}
-.cud-space-ph{aspect-ratio:1/1;position:relative;cursor:pointer}
+.cud-space-ph{aspect-ratio:4/3;position:relative;cursor:pointer;flex:none}
 .cud-space-ph img{transition:transform .6s cubic-bezier(.2,.7,.3,1)}
 .cud-space:hover .cud-space-ph img{transform:scale(1.06)}
 .cud-space-car-track{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
@@ -346,13 +342,13 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-space-car-prev{left:8px}
 .cud-space-car-next{right:8px}
 .cud-space-car-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
-.cud-space-in{display:block;width:100%;padding:20px 18px 26px;background:none;border:0;font:inherit;text-align:center;color:inherit;cursor:pointer}
+.cud-space-in{display:flex;flex-direction:column;flex:1;width:100%;padding:20px 18px 26px;background:none;border:0;font:inherit;text-align:center;color:inherit;cursor:pointer}
 .cud-space-in:focus-visible{outline:2px solid var(--olive);outline-offset:-4px}
 .cud-space-no{font-size:10px;letter-spacing:.14em;color:var(--ink2);margin:0 0 10px}
 .cud-space h3{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
 .cud-space p{font-size:12px;font-weight:300;line-height:1.7;color:var(--ink2);margin:0 0 14px;overflow-wrap:break-word}
 .cud-space-feat{font-size:9.5px;font-weight:300;letter-spacing:.03em;line-height:1.6;color:var(--ink2);margin:0 0 12px;overflow-wrap:break-word}
-.cud-space-meta{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:0 0 4px}
+.cud-space-meta{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:auto 0 4px}
 .cud-space-price{font-family:var(--serif);font-size:18px;color:var(--ink);margin:0}
 .cud-space-unit{font-family:var(--sans);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){.cud-space{transition:none}}
