@@ -334,10 +334,20 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 @media (max-width:560px){.cud-space-solo,.cud-space-pair{grid-template-columns:1fr}}
 .cud-space{background:#fff;border:1px solid var(--line);text-align:center;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
 .cud-space:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(43,40,34,.35);border-color:var(--olive)}
-.cud-space-ph{aspect-ratio:1/1}
+.cud-space-ph{aspect-ratio:1/1;position:relative;cursor:pointer}
 .cud-space-ph img{transition:transform .6s cubic-bezier(.2,.7,.3,1)}
 .cud-space:hover .cud-space-ph img{transform:scale(1.06)}
-.cud-space-in{padding:20px 18px 26px}
+.cud-space-car-track{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.cud-space-car-track::-webkit-scrollbar{display:none}
+.cud-space-car-slide{flex:0 0 100%;scroll-snap-align:start}
+.cud-space-car-btn{position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:999px;background:rgba(25,23,19,.5);border:0;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .25s ease,background .2s ease;z-index:2;padding:0}
+.cud-space-carousel:hover .cud-space-car-btn,.cud-room-dialog-media:hover .cud-space-car-btn,.cud-space-car-btn:focus-visible{opacity:1}
+.cud-space-car-btn:hover{background:rgba(25,23,19,.8)}
+.cud-space-car-prev{left:8px}
+.cud-space-car-next{right:8px}
+.cud-space-car-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
+.cud-space-in{display:block;width:100%;padding:20px 18px 26px;background:none;border:0;font:inherit;text-align:center;color:inherit;cursor:pointer}
+.cud-space-in:focus-visible{outline:2px solid var(--olive);outline-offset:-4px}
 .cud-space-no{font-size:10px;letter-spacing:.14em;color:var(--ink2);margin:0 0 10px}
 .cud-space h3{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px}
 .cud-space p{font-size:12px;font-weight:300;line-height:1.7;color:var(--ink2);margin:0 0 14px;overflow-wrap:break-word}
@@ -346,6 +356,32 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-space-price{font-family:var(--serif);font-size:18px;color:var(--ink);margin:0}
 .cud-space-unit{font-family:var(--sans);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
 @media (prefers-reduced-motion:reduce){.cud-space{transition:none}}
+
+/* ---- ROOM DETAIL DIALOG ---------------------------------------------- */
+.cud-room-dialog{border:0;padding:0;max-width:900px;width:92vw;max-height:86vh;background:var(--sand);color:var(--ink)}
+.cud-room-dialog::backdrop{background:rgba(15,13,10,.74)}
+.cud-room-dialog-in{display:grid;grid-template-columns:1fr 1fr;max-height:86vh}
+.cud-room-dialog-media{position:relative;background:#DCD5C7;overflow:hidden}
+.cud-room-dialog-media .cud-space-car-track{position:absolute;inset:0}
+.cud-room-dialog-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:999px;background:rgba(25,23,19,.55);border:0;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;padding:0}
+.cud-room-dialog-close:hover{background:rgba(25,23,19,.85)}
+.cud-room-dialog-close svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:1.8}
+.cud-room-dialog-tx{padding:40px 36px;overflow-y:auto;text-align:left}
+.cud-room-dialog-no{font-size:10px;letter-spacing:.14em;color:var(--ink2);margin:0 0 8px}
+.cud-room-dialog-loc{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 4px}
+.cud-room-dialog-title{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,30px);margin:0 0 8px}
+.cud-room-dialog-tag{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink2);margin:0 0 18px}
+.cud-room-dialog-desc{font-size:13.5px;font-weight:300;line-height:1.9;color:var(--ink2);margin:0 0 22px;overflow-wrap:break-word}
+.cud-room-dialog-feat{font-size:11px;font-weight:300;letter-spacing:.02em;line-height:1.7;color:var(--ink2);margin:0 0 18px;padding-top:18px;border-top:1px solid var(--line);overflow-wrap:break-word}
+.cud-room-dialog-meta{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:0 0 4px}
+.cud-room-dialog-price{font-family:var(--serif);font-size:24px;color:var(--ink);margin:0}
+@media (max-width:700px){
+.cud-room-dialog{max-height:90vh}
+.cud-room-dialog-in{grid-template-columns:1fr;max-height:90vh;overflow-y:auto}
+.cud-room-dialog-media{aspect-ratio:1/1}
+.cud-room-dialog-tx{padding:28px 24px;overflow-y:visible}
+}
+@media (prefers-reduced-motion:reduce){.cud-space-car-track{scroll-behavior:auto}}
 
 /* ---- INVESTMENT PRICE LIST ------------------------------------------------ */
 .cud-price-list{list-style:none;margin:30px auto 0;padding:0;display:flex;flex-direction:column;gap:2px;max-width:420px}
@@ -446,6 +482,6 @@ html{scroll-behavior:auto}
 .cud-loader-mark{animation:none;opacity:1}
 .cud-reveal{opacity:1;transform:none;transition:none}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
-.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
+.cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-space-car-btn,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join{transition:none}
 .cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
 }
