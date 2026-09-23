@@ -1,8 +1,8 @@
-/* Newsletter sign-up: submits to the Cloudflare Worker at /api/newsletter
-   (same origin, no CORS/CSP changes needed beyond allow-listing
-   challenges.cloudflare.com for the Turnstile widget/script). See
-   worker/newsletter.js for the receiving side and required secrets. */
+/* Newsletter sign-up: temporarily disabled (backend not ready yet).
+   Submits to the Cloudflare Worker at /api/newsletter once re-enabled;
+   see worker/newsletter.js for the receiving side and required secrets. */
 (function(){
+var NEWSLETTER_ENABLED=false;
 var f=document.querySelector('.cud-nl-form');
 if(f){
 var isPl=(document.documentElement.lang||'').toLowerCase().indexOf('pl')===0;
@@ -11,9 +11,18 @@ var joinBtn=f.querySelector('.cud-nl-join');
 var MSG={
 ok:isPl?'Dziękujemy! Zostałeś zapisany.':'Thanks! You’re on the list.',
 err:isPl?'Coś poszło nie tak. Spróbuj ponownie za chwilę albo napisz na contact@cudexperience.com.':'Something went wrong. Please try again shortly, or email contact@cudexperience.com.',
-turnstile:isPl?'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.':'Please confirm you’re not a robot and try again.'
+turnstile:isPl?'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.':'Please confirm you’re not a robot and try again.',
+disabled:isPl?'Zapisy chwilowo wstrzymane. Wróć niebawem albo napisz na contact@cudexperience.com.':'Sign-ups are temporarily paused. Please check back soon, or email contact@cudexperience.com.'
 };
 function setStatus(msg){if(s)s.textContent=msg;}
+if(!NEWSLETTER_ENABLED){
+if(joinBtn)joinBtn.setAttribute('aria-disabled','true');
+f.addEventListener('submit',function(e){
+e.preventDefault();
+setStatus(MSG.disabled);
+});
+return;
+}
 f.addEventListener('submit',function(e){
 e.preventDefault();
 setStatus('');
