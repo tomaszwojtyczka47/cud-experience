@@ -1,11 +1,15 @@
 /* Journal carousel (journal/index.html, pl/journal/index.html) — fetches
-   the Worker-proxied TravelPixieFreak "Shades of Human Life" feed
-   (see worker/journal.js) and renders it as an auto-advancing, looping
-   carousel. If the fetch fails or returns no items, the page's existing
-   static "First stories coming soon" panel is left exactly as-is — this
-   file never touches it unless real articles are available. Card text
-   is inserted via textContent (not innerHTML): the feed is third-party
-   content, so it's treated as untrusted data, never as markup. */
+   the Worker-proxied TravelPixieFreak feed (see worker/journal.js) and
+   renders it as an auto-advancing, looping carousel. The feed request
+   passes ?lang= based on the page's <html lang>, so the English page
+   gets the "Shades of Human Life" category and the Polish page gets the
+   separate "Odcienie Ludzkiego Życia" category (see worker/journal.js
+   for the two feed URLs). If the fetch fails or returns no items, the
+   page's existing static "First stories coming soon" panel is left
+   exactly as-is — this file never touches it unless real articles are
+   available. Card text is inserted via textContent (not innerHTML): the
+   feed is third-party content, so it's treated as untrusted data, never
+   as markup. */
 (function(){
 var root = document.querySelector('[data-journal-carousel]');
 var fallback = document.querySelector('[data-journal-fallback]');
@@ -15,7 +19,7 @@ var isPl = (document.documentElement.lang||'').toLowerCase().indexOf('pl')===0;
 var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var AUTOPLAY_MS = 5000;
 
-fetch('/api/journal').then(function(r){
+fetch('/api/journal?lang=' + (isPl ? 'pl' : 'en')).then(function(r){
 if(!r.ok) throw new Error('bad status');
 return r.json();
 }).then(function(data){
