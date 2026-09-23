@@ -5,29 +5,35 @@
  * (same origin as the site — no CORS handling needed, and the existing
  * per-page CSP `connect-src 'self'` already covers the browser fetch()).
  *
- * Fetches TravelPixieFreak's English-language "Shades Of Human Life"
- * WordPress category RSS feed and returns it as a small JSON array for
- * assets/js/journal-carousel.js to render. This is the mechanism behind
- * journal/index.html and pl/journal/index.html's auto-syncing carousel —
- * when a new post is published in that category on travelpixiefreak.com,
- * it appears on cudexperience.com automatically, no redeploy needed.
+ * Fetches TravelPixieFreak's per-language WordPress category RSS feed and
+ * returns it as a small JSON array for assets/js/journal-carousel.js to
+ * render. This is the mechanism behind journal/index.html and pl/journal/
+ * index.html's auto-syncing carousel — when a new post is published in the
+ * matching category on travelpixiefreak.com, it appears on
+ * cudexperience.com automatically, no redeploy needed.
  *
- * Source feed (verified 2026-09-11 to contain ONLY English posts — the
- * Polish "Odcienie Ludzkiego Życia" posts live in a separate WordPress
- * category and never appear here, so no language filtering is needed):
- *   https://travelpixiefreak.com/category/shades-of-human-life/feed/
+ * The English and Polish posts live in two separate WordPress categories
+ * (verified 2026-09-23 — each feed contains only its own language, so no
+ * text-based language filtering is needed) and journal-carousel.js
+ * requests the one matching the page's <html lang> via ?lang=:
+ *   en (default): https://travelpixiefreak.com/category/shades-of-human-life/feed/
+ *   pl:           https://travelpixiefreak.com/category/odcienie-ludzkiego-zycia/feed/
  *
  * Deliberately kept at WordPress's default 10-most-recent items (the
  * feed's native limit) rather than switching to the REST API's full
  * per_page=100 listing — Piotr chose to keep the carousel to the 10
- * newest posts rather than surface all 21 that exist upstream.
+ * newest posts rather than surface all that exist upstream.
  *
  * Response is cached at Cloudflare's edge (Cache API) for CACHE_TTL_
- * SECONDS so the upstream WordPress site is hit at most once per TTL
- * window regardless of visitor traffic on cudexperience.com.
+ * SECONDS, keyed per language, so the upstream WordPress site is hit at
+ * most once per TTL window per language regardless of visitor traffic on
+ * cudexperience.com.
  */
 
-const FEED_URL = "https://travelpixiefreak.com/category/shades-of-human-life/feed/";
+const FEED_URLS = {
+  en: "https://travelpixiefreak.com/category/shades-of-human-life/feed/",
+  pl: "https://travelpixiefreak.com/category/odcienie-ludzkiego-zycia/feed/",
+};
 const CACHE_TTL_SECONDS = 3600; // 1 hour
 
 function stripCdata(s) {
@@ -85,15 +91,19 @@ export default {
       return json({ error: "method_not_allowed" }, 405);
     }
 
+    const reqUrl = new URL(request.url);
+    const lang = reqUrl.searchParams.get("lang") === "pl" ? "pl" : "en";
+    const feedUrl = FEED_URLS[lang];
+
     const cache = caches.default;
-    const cacheKey = new Request("https://cudexperience.com/api/journal-cache-key");
+    const cacheKey = new Request("https://cudexperience.com/api/journal-cache-key?lang=" + lang);
 
     const cached = await cache.match(cacheKey);
     if (cached) return cached;
 
     let items = [];
     try {
-      const res = await fetch(FEED_URL, {
+      const res = await fetch(feedUrl, {
         headers: { "User-Agent": "CUDExperienceJournalBot/1.0 (+https://cudexperience.com)" },
       });
       if (res.ok) {
