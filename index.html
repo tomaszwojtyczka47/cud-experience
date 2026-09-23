@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4Sw3mfSWcYP8h2p1zf8gm588cwfHhX6PTf6raRqk4Vg=' 'sha256-JZD0/VAFZ2jNaYbPFiX38w9/Vi05c2HOlmKXaVVMWtQ=' 'sha256-3PctQPbJHUl2p39NjJfG5wOgjgaXrSTh/0kzOClbJBk=' 'sha256-TscuvFqtDn2/29QPHMyxwriQntvDBjrc/zJ+OA7yja4=' https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; style-src 'self' 'unsafe-inline' https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; font-src 'self' https://fonts.gstatic.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; img-src 'self' data: https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4Sw3mfSWcYP8h2p1zf8gm588cwfHhX6PTf6raRqk4Vg=' 'sha256-JZD0/VAFZ2jNaYbPFiX38w9/Vi05c2HOlmKXaVVMWtQ=' 'sha256-3PctQPbJHUl2p39NjJfG5wOgjgaXrSTh/0kzOClbJBk=' 'sha256-TscuvFqtDn2/29QPHMyxwriQntvDBjrc/zJ+OA7yja4=' https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai; font-src 'self' https://fonts.gstatic.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai; img-src 'self' data: https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://app.secureprivacy.ai https://cmp.secureprivacy.ai https://api-prod.secureprivacy.ai https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>(function(){try{if(window.top!==window.self){window.top.location.href=window.self.location.href}}catch(e){document.documentElement.style.display='none'}})();window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('consent','default',{'ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','analytics_storage':'denied','wait_for_update':2000});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,6 +40,7 @@
 <meta property="og:image:height" content="1260">
 
 <script src="https://app.secureprivacy.ai/script/6a7de1516907d90b3bdd6239.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SQ21EGMK7H"></script>
 <script>
@@ -374,8 +375,13 @@ gtag('config', 'G-SQ21EGMK7H');
 <div class="cud-nl-r cud-reveal cud-reveal-2">
 <form class="cud-nl-form">
 <label class="cud-nl-label" for="cud-nl-email">Your email address</label>
-<input class="cud-nl-field" id="cud-nl-email" name="email" type="email" placeholder="Your email address" autocomplete="email">
+<input class="cud-nl-field" id="cud-nl-email" name="email" type="email" placeholder="Your email address" autocomplete="email" required>
+<div class="cud-vh" aria-hidden="true">
+<label for="cud-nl-website">Leave this field empty</label>
+<input type="text" id="cud-nl-website" name="website" tabindex="-1" autocomplete="off">
+</div>
 <button class="cud-nl-join" type="submit">Join</button>
+<div class="cf-turnstile" data-sitekey="0x4AAAAAAEnjbjjpm0FyQwcT" data-size="flexible"></div>
 </form>
 </div>
 </div>
