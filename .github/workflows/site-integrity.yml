@@ -1,0 +1,25 @@
+name: Site integrity check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history is needed so the checker can look up each page's
+          # real last-changed date in git and compare it against sitemap.xml.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run sitemap / CSP / links / EN-PL parity check
+        run: python3 scripts/check-site-integrity.py
