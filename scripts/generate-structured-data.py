@@ -182,15 +182,32 @@ def experience_items(text: str, lang: str) -> list[tuple[str, str]]:
 
 
 def journal_posts(text: str) -> list[dict]:
-    """Posts pre-rendered by scripts/sync-journal.py between the journal-feed markers."""
+    """Posts pre-rendered by scripts/sync-journal.py between the journal-feed markers.
+    Besides title/date/excerpt, each card carries the blog's own author and image
+    (data-* attributes); a post without them simply has no such field."""
     m = re.search(r"<!-- journal-feed:start.*?-->(.*?)<!-- journal-feed:end -->", text, re.S)
     if not m:
         return []
-    pat = re.compile(
-        r'<a class="cud-jrl-card" href="([^"]+)"[^>]*>.*?<span class="cud-jrl-date">(?:<time datetime="([^"]*)">)?.*?</span>'
+    body_re = re.compile(
+        r'<span class="cud-jrl-date">(?:<time datetime="([^"]*)">)?.*?</span>'
         r'<span class="cud-jrl-h">(.*?)</span><span class="cud-jrl-ex">(.*?)</span>', re.S)
-    return [{"url": html.unescape(u), "date": d, "title": clean(t), "excerpt": clean(e)}
-            for u, d, t, e in pat.findall(m.group(1))]
+    posts = []
+    for attrs, inner in re.findall(r'<a class="cud-jrl-card"([^>]*)>(.*?)</a>', m.group(1), re.S):
+        a = {k: html.unescape(v) for k, v in re.findall(r'([\w-]+)="([^"]*)"', attrs)}
+        b = body_re.search(inner)
+        if not a.get("href") or not b:
+            continue
+        image = None
+        if a.get("data-image"):
+            image = {"url": a["data-image"]}
+            for dim in ("width", "height"):
+                if a.get(f"data-image-{dim}", "").isdigit():
+                    image[dim] = int(a[f"data-image-{dim}"])
+        posts.append({
+            "url": a["href"], "date": b.group(1), "title": clean(b.group(2)), "excerpt": clean(b.group(3)),
+            "author": a.get("data-author"), "author_url": a.get("data-author-url"), "image": image,
+        })
+    return posts
 
 
 # --- Graph builders ----------------------------------------------------------
@@ -351,6 +368,12 @@ def build_graph(page: dict, lang: str, text: str) -> list[dict]:
                     post["datePublished"] = p["date"]
                 if p["excerpt"]:
                     post["description"] = p["excerpt"]
+                if p["author"]:
+                    post["author"] = {"@type": "Person", "name": p["author"]}
+                    if p["author_url"]:
+                        post["author"]["url"] = p["author_url"]
+                if p["image"]:
+                    post["image"] = {"@type": "ImageObject", **p["image"]}
                 items.append({"@type": "ListItem", "position": i, "item": post})
             web["mainEntity"] = {"@type": "ItemList", "@id": f"{url}#posts", "itemListElement": items}
     if page.get("hoian"):
