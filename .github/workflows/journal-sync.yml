@@ -1,0 +1,70 @@
+name: Journal sync
+
+# Writes the latest TravelPixieFreak posts into journal/index.html and
+# pl/journal/index.html as static HTML (see scripts/sync-journal.py), so
+# crawlers that do not run JavaScript can read them. Visitors with JavaScript
+# still get the live carousel from /api/journal.
+#
+# Runs every day and on demand (Actions > Journal sync > Run workflow). It only
+# commits when a post actually changed, and it never commits an empty block:
+# if a feed is down, the page is left as it was.
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write   # push the refreshed HTML to main
+  pages: write      # ask GitHub Pages for a rebuild (a push made with GITHUB_TOKEN does not start one)
+
+concurrency:
+  group: journal-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          # Full history: the integrity checker compares sitemap <lastmod>
+          # with each page's last commit date.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch the feeds and rewrite the Journal pages
+        run: python3 scripts/sync-journal.py
+
+      - name: Verify the result before publishing it
+        run: |
+          python3 scripts/generate-structured-data.py --check
+          python3 scripts/check-site-integrity.py
+
+      - name: Commit and push if anything changed
+        id: commit
+        run: |
+          if git diff --quiet; then
+            echo "Journal is already up to date, nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Update Journal posts in static HTML ($(date -u +%Y-%m-%d))"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Ask GitHub Pages to rebuild
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" \
+            || echo "::warning::Could not request a Pages build; the site updates on the next push to main"

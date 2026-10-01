@@ -591,6 +591,52 @@ def check_llms_txt() -> None:
 
 
 # ---------------------------------------------------------------------------
+# 7. Journal static block (written by scripts/sync-journal.py)
+# ---------------------------------------------------------------------------
+
+JOURNAL_PAGES = ("journal/index.html", "pl/journal/index.html")
+JOURNAL_START_RE = re.compile(r"<!-- journal-feed:start\b[^>]*-->")
+JOURNAL_END = "<!-- journal-feed:end -->"
+JOURNAL_CARD_RE = re.compile(r'<a class="cud-jrl-card" href="([^"]*)"([^>]*)>')
+
+
+def check_journal_feed() -> None:
+    """The pre-rendered Journal posts must stay a well-formed, safe block: the
+    JS carousel hides it through data-journal-fallback, and every card must
+    point at the blog (the feed text is third-party content)."""
+    for rel in JOURNAL_PAGES:
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        text = read(path)
+        starts = JOURNAL_START_RE.findall(text)
+        if not starts and JOURNAL_END not in text:
+            warn(f"{rel}: no pre-rendered Journal block (scripts/sync-journal.py has not run yet)")
+            continue
+        if len(starts) != 1 or text.count(JOURNAL_END) != 1:
+            err(f"{rel}: expected exactly one journal-feed:start and one journal-feed:end marker")
+            continue
+        a = JOURNAL_START_RE.search(text).end()
+        b = text.index(JOURNAL_END)
+        if b < a:
+            err(f"{rel}: journal-feed markers are in the wrong order")
+            continue
+        block = text[a:b]
+        if block.count("data-journal-fallback") != 1:
+            err(f"{rel}: Journal block must contain exactly one data-journal-fallback element")
+        if block.count("<div") != block.count("</div>"):
+            err(f"{rel}: unbalanced <div> inside the Journal block")
+        cards = JOURNAL_CARD_RE.findall(block)
+        if not cards:
+            err(f"{rel}: Journal block has no post cards")
+        for href, rest in cards:
+            if not href.startswith("https://travelpixiefreak.com/"):
+                err(f"{rel}: Journal card links outside travelpixiefreak.com: {href}")
+            if "noopener" not in rest:
+                err(f"{rel}: Journal card {href} opens a new tab without rel=noopener")
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> int:
     check_sitemap_lastmod()
@@ -600,6 +646,7 @@ def main() -> int:
     check_jsonld()
     check_robots_txt()
     check_llms_txt()
+    check_journal_feed()
 
     if warnings:
         print(f"--- {len(warnings)} warning(s) ---")
