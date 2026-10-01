@@ -113,7 +113,7 @@ PAGES = [
     {"path": "", "type": "WebPage", "crumbs": [], "about_org": True},
     {"path": "about/", "type": "AboutPage", "crumbs": [("about/", {"en": "About C.U.D.", "pl": "O C.U.D."})], "about_org": True},
     {"path": "philosophy/", "type": "WebPage", "crumbs": [("philosophy/", {"en": "Philosophy", "pl": "Filozofia"})], "about_org": True},
-    {"path": "journal/", "type": "CollectionPage", "crumbs": [("journal/", {"en": "Journal", "pl": "Journal"})]},
+    {"path": "journal/", "type": "CollectionPage", "crumbs": [("journal/", {"en": "Journal", "pl": "Journal"})], "journal_feed": True},
     {"path": "contact/", "type": "ContactPage", "crumbs": [("contact/", {"en": "Contact", "pl": "Kontakt"})], "about_org": True},
     {"path": "privacy/", "type": "WebPage", "crumbs": [("privacy/", {"en": "Privacy Policy", "pl": "Polityka Prywatności"})]},
     {"path": "terms/", "type": "WebPage", "crumbs": [("terms/", {"en": "Terms of Use", "pl": "Regulamin"})]},
@@ -179,6 +179,18 @@ def experience_items(text: str, lang: str) -> list[tuple[str, str]]:
         assert not href.startswith("http"), href
         items.append((page_url(lang, "experiences/" + href), clean(name)))
     return items
+
+
+def journal_posts(text: str) -> list[dict]:
+    """Posts pre-rendered by scripts/sync-journal.py between the journal-feed markers."""
+    m = re.search(r"<!-- journal-feed:start.*?-->(.*?)<!-- journal-feed:end -->", text, re.S)
+    if not m:
+        return []
+    pat = re.compile(
+        r'<a class="cud-jrl-card" href="([^"]+)"[^>]*>.*?<span class="cud-jrl-date">(?:<time datetime="([^"]*)">)?.*?</span>'
+        r'<span class="cud-jrl-h">(.*?)</span><span class="cud-jrl-ex">(.*?)</span>', re.S)
+    return [{"url": html.unescape(u), "date": d, "title": clean(t), "excerpt": clean(e)}
+            for u, d, t, e in pat.findall(m.group(1))]
 
 
 # --- Graph builders ----------------------------------------------------------
@@ -329,6 +341,18 @@ def build_graph(page: dict, lang: str, text: str) -> list[dict]:
             "itemListElement": [{"@type": "ListItem", "position": i, "url": u, "name": n}
                                 for i, (u, n) in enumerate(items, start=1)],
         }
+    if page.get("journal_feed"):
+        posts = journal_posts(text)
+        if posts:
+            items = []
+            for i, p in enumerate(posts, start=1):
+                post = {"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "inLanguage": lang}
+                if p["date"]:
+                    post["datePublished"] = p["date"]
+                if p["excerpt"]:
+                    post["description"] = p["excerpt"]
+                items.append({"@type": "ListItem", "position": i, "item": post})
+            web["mainEntity"] = {"@type": "ItemList", "@id": f"{url}#posts", "itemListElement": items}
     if page.get("hoian"):
         web["mainEntity"] = {"@id": EVENT_ID}
         web["about"] = [{"@id": TRIP_ID}, {"@id": DEST_ID}]
