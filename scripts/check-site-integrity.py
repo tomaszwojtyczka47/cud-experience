@@ -15,6 +15,14 @@ Checks, across every checked-in HTML page:
      same structural shape (image count, button count, form-field count,
      section/id count) so a section forgotten in translation gets flagged.
 
+  5. JSON-LD structured data: every block parses, every {"@id": ...}
+     reference resolves (on the same page or on the page it points at), WebPage
+     urls / breadcrumbs match the canonical URL, and the Hoi An Event offers and
+     FAQPage match what the page visibly says (prices, questions).
+  6. robots.txt / llms.txt: robots.txt declares the sitemap and well-formed
+     groups; llms.txt follows the llmstxt.org shape, its internal links resolve
+     and every price it quotes appears on the Hoi An page.
+
 Exit code is non-zero if any check finds a problem, so this is meant to run
 in CI (see .github/workflows/site-integrity.yml).
 
@@ -392,12 +400,206 @@ def check_en_pl_parity() -> None:
 
 
 # ---------------------------------------------------------------------------
+# 5. JSON-LD structured data
+# ---------------------------------------------------------------------------
+
+LD_BLOCK_RE = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+CANONICAL_RE = re.compile(r'<link rel="canonical" href="([^"]*)"', re.IGNORECASE)
+SPACE_PRICE_RE = re.compile(r'<p class="cud-space-price">(.*?)</p>', re.S)
+FAQ_ITEM_RE = re.compile(r'<li class="cud-faq-item"><details><summary>(.*?)</summary>', re.S)
+
+
+def rel_to_url(rel: str) -> str:
+    if rel == "index.html":
+        return f"https://{SITE_HOST}/"
+    return f"https://{SITE_HOST}/{rel[: -len('index.html')]}"
+
+
+def visible_text(fragment: str) -> str:
+    text = re.sub(r"<[^>]+>", "", fragment)
+    return re.sub(r"\s+", " ", html.unescape(text)).strip()
+
+
+def walk_ld(node, defined: set[str], refs: list[str], nodes: list[dict]) -> None:
+    if isinstance(node, list):
+        for x in node:
+            walk_ld(x, defined, refs, nodes)
+    elif isinstance(node, dict):
+        if "@id" in node and set(node) == {"@id"}:
+            refs.append(node["@id"])
+            return
+        if "@id" in node:
+            defined.add(node["@id"])
+        if "@type" in node:
+            nodes.append(node)
+        for k, v in node.items():
+            if k != "@context":
+                walk_ld(v, defined, refs, nodes)
+
+
+def check_jsonld() -> None:
+    import json
+
+    per_page: dict[str, dict] = {}
+    for p in all_html_files():
+        rel = p.relative_to(ROOT).as_posix()
+        text = read(p)
+        blocks = LD_BLOCK_RE.findall(text)
+        if not blocks:
+            continue
+        defined: set[str] = set()
+        refs: list[str] = []
+        nodes: list[dict] = []
+        ok = True
+        for body in blocks:
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError as e:
+                err(f"{rel}: JSON-LD block is not valid JSON ({e})")
+                ok = False
+                continue
+            walk_ld(data, defined, refs, nodes)
+        if ok:
+            per_page[rel] = {"defined": defined, "refs": refs, "nodes": nodes, "text": text}
+
+    by_url = {rel_to_url(rel): info["defined"] for rel, info in per_page.items()}
+
+    for rel, info in per_page.items():
+        text, nodes = info["text"], info["nodes"]
+        for ref in info["refs"]:
+            if ref in info["defined"]:
+                continue
+            base = ref.split("#", 1)[0]
+            if ref in by_url.get(base, set()):
+                continue
+            err(f"{rel}: JSON-LD reference '{ref}' is not defined on this page or on the page it points at")
+
+        canon = CANONICAL_RE.search(text)
+        canon_url = canon.group(1) if canon else None
+        for n in nodes:
+            types = n["@type"] if isinstance(n["@type"], list) else [n["@type"]]
+            if "BreadcrumbList" in types:
+                items = n.get("itemListElement", [])
+                if [i.get("position") for i in items] != list(range(1, len(items) + 1)):
+                    err(f"{rel}: BreadcrumbList positions are not 1..{len(items)}")
+                if canon_url and items and items[-1].get("item") != canon_url:
+                    err(f"{rel}: last BreadcrumbList item {items[-1].get('item')} is not the canonical URL")
+            if any(t in ("WebPage", "AboutPage", "ContactPage", "CollectionPage") for t in types):
+                if canon_url and n.get("url") != canon_url:
+                    err(f"{rel}: WebPage url {n.get('url')} does not match canonical {canon_url}")
+            if "Event" in types:
+                for key in ("name", "startDate", "location"):
+                    if key not in n:
+                        err(f"{rel}: Event is missing '{key}'")
+                offers = n.get("offers", [])
+                for o in offers:
+                    for key in ("price", "priceCurrency", "availability", "url", "validFrom"):
+                        if key not in o:
+                            err(f"{rel}: Event offer '{o.get('name')}' is missing '{key}'")
+                visible = sorted(re.sub(r"\D", "", visible_text(re.sub(r"<span.*?</span>", "", m)))
+                                 for m in SPACE_PRICE_RE.findall(text))
+                declared = sorted(str(o.get("price")) for o in offers)
+                if visible and visible != declared:
+                    err(f"{rel}: Event offer prices {declared} differ from the visible room prices {visible}")
+            if "FAQPage" in types:
+                declared_q = [q.get("name") for q in n.get("mainEntity", [])]
+                visible_q = [visible_text(q) for q in FAQ_ITEM_RE.findall(text)]
+                if declared_q != visible_q:
+                    err(f"{rel}: FAQPage questions do not match the visible FAQ ({len(declared_q)} vs {len(visible_q)})")
+
+
+# ---------------------------------------------------------------------------
+# 6. robots.txt and llms.txt
+# ---------------------------------------------------------------------------
+
+MD_LINK_RE = re.compile(r"\[[^\]]+\]\(([^)\s]+)\)")
+PRICE_RE = re.compile(r"\b\d{1,3}(?:,\d{3})+\b")  # amounts written like 19,500
+AI_BOTS = ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "Claude-User",
+           "PerplexityBot", "Perplexity-User", "Google-Extended", "Applebot-Extended")
+
+
+def check_robots_txt() -> None:
+    path = ROOT / "robots.txt"
+    if not path.exists():
+        err("robots.txt missing")
+        return
+    groups: list[tuple[list[str], list[str]]] = []  # (user-agents, rules)
+    sitemaps: list[str] = []
+    agents: list[str] = []
+    rules: list[str] = []
+    for raw in read(path).splitlines():
+        line = raw.split("#", 1)[0].strip()
+        if not line or ":" not in line:
+            continue
+        field, value = (x.strip() for x in line.split(":", 1))
+        field = field.lower()
+        if field == "user-agent":
+            if rules:
+                groups.append((agents, rules))
+                agents, rules = [], []
+            agents.append(value)
+        elif field in ("allow", "disallow"):
+            rules.append(f"{field}: {value}")
+        elif field == "sitemap":
+            sitemaps.append(value)
+    if agents:
+        groups.append((agents, rules))
+    for ua, rl in groups:
+        if not rl:
+            err(f"robots.txt: group for {', '.join(ua)} has no Allow/Disallow rule")
+    if not any("*" in ua for ua, _ in groups):
+        err("robots.txt: no 'User-agent: *' group")
+    if f"https://{SITE_HOST}/sitemap.xml" not in sitemaps:
+        err(f"robots.txt: missing 'Sitemap: https://{SITE_HOST}/sitemap.xml'")
+    for ua, rl in groups:
+        for bot in ua:
+            if bot in AI_BOTS and "disallow: /" in rl:
+                warn(f"robots.txt: {bot} is disallowed from the whole site (intended?)")
+
+
+def check_llms_txt() -> None:
+    path = ROOT / "llms.txt"
+    if not path.exists():
+        err("llms.txt missing")
+        return
+    text = read(path)
+    lines = [ln for ln in text.splitlines() if ln.strip()]
+    if not lines or not lines[0].startswith("# "):
+        err("llms.txt: must start with a single '# Title' H1 line")
+    if len(lines) < 2 or not lines[1].startswith("> "):
+        err("llms.txt: the H1 must be followed by a '> summary' blockquote")
+    if sum(1 for ln in lines if ln.startswith("# ")) != 1:
+        err("llms.txt: must contain exactly one H1")
+
+    for raw in MD_LINK_RE.findall(text):
+        target = raw
+        if target.startswith(f"https://{SITE_HOST}"):
+            target = urlsplit(target).path or "/"
+        elif target.startswith(("http://", "https://", "mailto:")):
+            continue
+        path_part = target.split("#", 1)[0].split("?", 1)[0]
+        candidate = resolve_local_path(ROOT / "llms.txt", path_part)
+        if candidate is None or resolve_page_or_asset(candidate) is None:
+            err(f"llms.txt: link '{raw}' does not resolve to a file in the site")
+
+    hoian = ROOT / "experiences" / "hoi-an" / "index.html"
+    if hoian.exists():
+        visible = {re.sub(r"\D", "", visible_text(m)) for m in SPACE_PRICE_RE.findall(read(hoian))}
+        for price in PRICE_RE.findall(text):
+            if re.sub(r"\D", "", price) not in visible:
+                err(f"llms.txt: amount '{price}' does not match any price on the Hoi An page")
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> int:
     check_sitemap_lastmod()
     check_csp_hashes()
     check_internal_links()
     check_en_pl_parity()
+    check_jsonld()
+    check_robots_txt()
+    check_llms_txt()
 
     if warnings:
         print(f"--- {len(warnings)} warning(s) ---")

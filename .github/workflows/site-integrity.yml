@@ -23,3 +23,6 @@ jobs:
 
       - name: Run sitemap / CSP / links / EN-PL parity check
         run: python3 scripts/check-site-integrity.py
+
+      - name: Structured data (JSON-LD) is in sync with the pages
+        run: python3 scripts/generate-structured-data.py --check
