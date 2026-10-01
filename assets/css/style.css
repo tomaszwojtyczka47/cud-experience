@@ -176,15 +176,16 @@ a.cud-ev:hover .cud-ev-b h3,a.cud-ev:hover .cud-ev-b h2{color:var(--olive)}
 .cud-nl-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .cud-nl-field{flex:1;min-width:140px;max-width:330px;background:#F6F4EE;color:#3A362E;font-size:12px;padding:13px 16px;border:0;font-family:inherit}
 .cud-nl-field::placeholder{color:var(--ink2)}
-.cud-nl-join{background:#EFEDE6;color:var(--ink);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:13px calc(30px - .2em) 13px 30px;display:flex;align-items:center;border:0;font-family:inherit;cursor:pointer;transition:background .25s ease;flex:none}
+.cud-nl-join{background:#EFEDE6;color:var(--ink);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:13px calc(30px - .2em) 13px 30px;display:flex;align-items:center;border:0;font-family:inherit;cursor:pointer;transition:background .25s ease,color .25s ease;flex:none}
 .cud-nl-join:hover{background:#fff}
-.cud-nl-join:disabled{opacity:.45;cursor:not-allowed}
-.cud-nl-join:disabled:hover{background:#EFEDE6}
+.cud-nl-join:disabled,.cud-nl-join:disabled:hover{background:rgba(239,237,230,.2);color:rgba(243,241,234,.6);cursor:not-allowed}
 /* Consent sits before the button in the DOM (Tab goes email > consent > Join) but is shown on its own row below the email + Join row. */
-.cud-nl-consent{order:1;flex:0 0 100%;display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:10px;line-height:1.7;color:rgba(243,241,234,.92);cursor:pointer}
-.cud-nl-consent input{accent-color:#EFEDE6;width:16px;height:16px;min-width:16px;margin:1px 0 0;flex:none;cursor:pointer}
-.cud-nl-consent input:focus-visible{outline-color:#fff}
-.cud-nl-consent a{color:#fff;text-decoration:underline}
+.cud-nl-consent{order:1;flex:0 0 100%;display:flex;align-items:flex-start;gap:10px;margin-top:14px;font-size:10.5px;font-weight:300;line-height:1.6;letter-spacing:.01em;color:rgba(243,241,234,.9);cursor:pointer}
+.cud-nl-consent input{-webkit-appearance:none;appearance:none;flex:none;width:16px;height:16px;margin:0;background:transparent no-repeat center/10px;border:1px solid rgba(243,241,234,.7);border-radius:0;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}
+.cud-nl-consent input:hover{border-color:#fff}
+.cud-nl-consent input:checked{background-color:#EFEDE6;border-color:#EFEDE6;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.2 6.3 4.8 8.8 9.8 3.4' fill='none' stroke='%235C5F42' stroke-width='1.6'/%3E%3C/svg%3E")}
+.cud-nl-consent input:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.cud-nl-consent a{color:#fff;text-decoration:underline;text-underline-offset:2px}
 .cud-nl-form .cf-turnstile{order:2}
 .cud-nl-foot{max-width:1180px;margin:0 auto;padding:0 32px 30px}
 .cud-nl-disclaimer{font-size:9.5px;line-height:1.7;color:rgba(243,241,234,.88);margin:0;max-width:820px}
