@@ -14,6 +14,12 @@ page as the static fallback block, in the same card markup the carousel uses:
   - crawlers, no-JS visitors and visitors whose /api/journal request fails see
     the real latest posts (title, date, excerpt, link) and a link to the archive.
 
+Each card also carries what the JSON-LD needs, all taken from the blog itself and
+never guessed: the full publication timestamp (<time datetime>, from the feed's
+pubDate), the author (feed dc:creator and the blog's author archive URL) and the
+post's image (og:image of the post page, falling back to the first image of the
+post in the feed). A field the blog does not provide is simply left out.
+
 Then it refreshes the JSON-LD (scripts/generate-structured-data.py), which lists
 the same posts, and bumps the sitemap <lastmod> of the pages that changed.
 
@@ -53,6 +59,10 @@ BLOG_PREFIX = "https://travelpixiefreak.com/"
 MAX_ITEMS = 10  # the feeds' native size, and what the carousel shows
 EXCERPT_CHARS = 140  # same cut as truncate() in assets/js/journal-carousel.js
 USER_AGENT = "CUDExperienceJournalSync/1.0 (+https://cudexperience.com)"
+UPLOADS_PREFIX = BLOG_PREFIX + "wp-content/uploads/"
+AUTHOR_SLUG_RE = re.compile(r"^[a-z0-9_-]+$")  # WordPress author archive: /author/<slug>/
+MIN_IMAGE_SIDE = 200  # skip icons and spacers
+POST_PAGE_DELAY = 0.3  # seconds between requests to the blog
 
 STRINGS = {
     "en": {"read": "Read on TravelPixieFreak", "all": "All stories on TravelPixieFreak"},
@@ -68,15 +78,16 @@ END = "<!-- journal-feed:end -->"
 LEGACY_OPEN = '<div class="cud-lock cud-reveal cud-reveal-3" data-journal-fallback>'
 
 
-def fetch(url: str) -> str | None:
-    for attempt in range(3):
+def fetch(url: str, tries: int = 3) -> str | None:
+    for attempt in range(tries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
             with urllib.request.urlopen(req, timeout=30) as resp:
                 return resp.read().decode("utf-8", errors="replace")
         except Exception as exc:  # network errors, HTTP errors, bad encodings
             print(f"  fetch attempt {attempt + 1} failed for {url}: {exc}")
-            time.sleep(2 * (attempt + 1))
+            if attempt + 1 < tries:
+                time.sleep(2 * (attempt + 1))
     return None
 
 
@@ -93,6 +104,53 @@ def tag_value(block: str, tag: str) -> str:
     return html.unescape(value).strip()
 
 
+def feed_image(block: str) -> dict | None:
+    """First real photo of the post in the feed's full content (it can differ from the
+    post's featured image, so it is only the fallback for og_image())."""
+    m = re.search(r"<content:encoded>([\s\S]*?)</content:encoded>", block)
+    if not m:
+        return None
+    body = re.sub(r"^\s*<!\[CDATA\[|\]\]>\s*$", "", m.group(1))
+    for tag in re.findall(r"<img\b[^>]*>", body):
+        src = re.search(r'\bsrc="([^"]*)"', tag)
+        if not src:
+            continue
+        url = html.unescape(src.group(1))
+        if not url.startswith(UPLOADS_PREFIX):
+            continue
+        dims = {}
+        for attr in ("width", "height"):
+            v = re.search(rf'\b{attr}="(\d+)"', tag)
+            if v:
+                dims[attr] = int(v.group(1))
+        if dims.get("width", MIN_IMAGE_SIDE) < MIN_IMAGE_SIDE or dims.get("height", MIN_IMAGE_SIDE) < MIN_IMAGE_SIDE:
+            continue
+        return {"url": url, **dims}
+    return None
+
+
+def og_image(post_url: str) -> dict | None:
+    """The post's own featured image, as the blog declares it in og:image."""
+    page = fetch(post_url, tries=2)
+    time.sleep(POST_PAGE_DELAY)
+    if not page:
+        return None
+    m = re.search(r'<meta\s+property="og:image"\s+content="([^"]*)"', page)
+    if not m:
+        return None
+    url = html.unescape(m.group(1))
+    if not url.startswith(UPLOADS_PREFIX):
+        return None
+    image = {"url": url}
+    for attr in ("width", "height"):
+        v = re.search(rf'<meta\s+property="og:image:{attr}"\s+content="(\d+)"', page)
+        if v:
+            image[attr] = int(v.group(1))
+    if image.get("width", MIN_IMAGE_SIDE) < MIN_IMAGE_SIDE or image.get("height", MIN_IMAGE_SIDE) < MIN_IMAGE_SIDE:
+        return None
+    return image
+
+
 def parse_items(xml: str) -> list[dict]:
     items = []
     for block in re.findall(r"<item>([\s\S]*?)</item>", xml):
@@ -100,16 +158,44 @@ def parse_items(xml: str) -> list[dict]:
         link = tag_value(block, "link")
         pub = tag_value(block, "pubDate")
         excerpt = tag_value(block, "description")
+        creator = tag_value(block, "dc:creator")
         if not (title and link and link.startswith(BLOG_PREFIX)):
             continue
         try:
-            date = email.utils.parsedate_to_datetime(pub).astimezone(datetime.timezone.utc).date()
+            stamp = email.utils.parsedate_to_datetime(pub)
         except (TypeError, ValueError):
-            date = None
-        items.append({"title": title, "link": link, "date": date, "excerpt": excerpt})
+            stamp = None
+        if stamp is not None and stamp.tzinfo is None:
+            stamp = None  # a timestamp without a zone would be a guess
+        items.append({
+            "title": title, "link": link, "excerpt": excerpt, "creator": creator,
+            "stamp": stamp,  # timezone-aware, exactly as the feed gives it
+            "date": stamp.astimezone(datetime.timezone.utc).date() if stamp else None,
+            "feed_image": feed_image(block),
+        })
         if len(items) == MAX_ITEMS:
             break
     return items
+
+
+def existing_images(page_text: str) -> dict[str, dict]:
+    """Images already written to the page, keyed by post URL (reused if the blog is unreachable)."""
+    found = {}
+    for attrs in re.findall(r'<a class="cud-jrl-card"([^>]*)>', page_text):
+        d = {k: html.unescape(v) for k, v in re.findall(r'([\w-]+)="([^"]*)"', attrs)}
+        if d.get("href") and d.get("data-image"):
+            img = {"url": d["data-image"]}
+            for attr in ("width", "height"):
+                if d.get(f"data-image-{attr}", "").isdigit():
+                    img[attr] = int(d[f"data-image-{attr}"])
+            found[d["href"]] = img
+    return found
+
+
+def attach_images(items: list[dict], page_text: str) -> None:
+    previous = existing_images(page_text)
+    for item in items:
+        item["image"] = og_image(item["link"]) or previous.get(item["link"]) or item["feed_image"]
 
 
 def truncate(text: str, n: int = EXCERPT_CHARS) -> str:
@@ -132,12 +218,29 @@ def esc(text: str) -> str:
     return html.escape(text, quote=True).encode("ascii", "xmlcharrefreplace").decode("ascii")
 
 
+def author_url(name: str) -> str | None:
+    """WordPress puts a user's posts at /author/<login>/. Only built for plain logins."""
+    return f"{BLOG_PREFIX}author/{name}/" if AUTHOR_SLUG_RE.match(name) else None
+
+
 def render_card(item: dict, lang: str) -> str:
     when = ""
     if item["date"]:
-        when = f'<time datetime="{item["date"].isoformat()}">{esc(fmt_date(item["date"], lang))}</time>'
+        when = f'<time datetime="{item["stamp"].isoformat()}">{esc(fmt_date(item["date"], lang))}</time>'
+    extra = ""
+    if item["creator"]:
+        extra += f' data-author="{esc(item["creator"])}"'
+        url = author_url(item["creator"])
+        if url:
+            extra += f' data-author-url="{esc(url)}"'
+    image = item.get("image")
+    if image:
+        extra += f' data-image="{esc(image["url"])}"'
+        for attr in ("width", "height"):
+            if attr in image:
+                extra += f' data-image-{attr}="{image[attr]}"'
     return (
-        f'<a class="cud-jrl-card" href="{esc(item["link"])}" target="_blank" rel="noopener">'
+        f'<a class="cud-jrl-card" href="{esc(item["link"])}" target="_blank" rel="noopener"{extra}>'
         f'<span class="cud-jrl-card-in"><span class="cud-jrl-date">{when}</span>'
         f'<span class="cud-jrl-h">{esc(" ".join(item["title"].split()))}</span>'
         f'<span class="cud-jrl-ex">{esc(" ".join(truncate(item["excerpt"]).split()))}</span>'
@@ -201,6 +304,7 @@ def main() -> int:
             continue
         path = ROOT / rel
         text = path.read_text(encoding="utf-8")
+        attach_images(items, text)
         new = apply_block(text, render_block(items, lang))
         if new == text:
             print(f"  {len(items)} posts, {rel} already up to date")

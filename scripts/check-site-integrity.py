@@ -598,6 +598,8 @@ JOURNAL_PAGES = ("journal/index.html", "pl/journal/index.html")
 JOURNAL_START_RE = re.compile(r"<!-- journal-feed:start\b[^>]*-->")
 JOURNAL_END = "<!-- journal-feed:end -->"
 JOURNAL_CARD_RE = re.compile(r'<a class="cud-jrl-card" href="([^"]*)"([^>]*)>')
+JOURNAL_TIME_RE = re.compile(r'<time datetime="([^"]*)"')
+JOURNAL_FULL_STAMP_RE = re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d)$")
 
 
 def check_journal_feed() -> None:
@@ -634,6 +636,17 @@ def check_journal_feed() -> None:
                 err(f"{rel}: Journal card links outside travelpixiefreak.com: {href}")
             if "noopener" not in rest:
                 err(f"{rel}: Journal card {href} opens a new tab without rel=noopener")
+            attrs = dict(re.findall(r'([\w-]+)="([^"]*)"', rest))
+            for name in ("data-image", "data-author-url"):
+                if name in attrs and not html.unescape(attrs[name]).startswith("https://travelpixiefreak.com/"):
+                    err(f"{rel}: Journal card {href} has {name} outside travelpixiefreak.com")
+            for name in ("data-image-width", "data-image-height"):
+                if name in attrs and not attrs[name].isdigit():
+                    err(f"{rel}: Journal card {href} has a non-numeric {name}")
+        # datePublished in the JSON-LD comes from these: a bare date would be a downgrade.
+        for stamp in JOURNAL_TIME_RE.findall(block):
+            if not JOURNAL_FULL_STAMP_RE.match(stamp):
+                err(f'{rel}: Journal <time datetime="{stamp}"> is not a full ISO 8601 timestamp with a time zone')
 
 
 # ---------------------------------------------------------------------------
