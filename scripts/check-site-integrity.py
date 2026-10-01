@@ -145,7 +145,7 @@ def check_sitemap_lastmod() -> None:
     # the sitemap. Pages marked noindex are intentionally left out of the
     # sitemap (Google's own guidance), so they're exempt.
     for p in all_html_files():
-        rel = str(p.relative_to(ROOT))
+        rel = p.relative_to(ROOT).as_posix()
         if p.name != "index.html":
             if rel not in NON_SITEMAP_HTML and p.name not in NON_SITEMAP_HTML:
                 warn(f"{rel}: non-index HTML file, not checked against sitemap")
