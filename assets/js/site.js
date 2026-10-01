@@ -15,6 +15,19 @@ turnstile:isPl?'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.':'Plea
 disabled:isPl?'Zapisy chwilowo wstrzymane. Wróć niebawem albo napisz na contact@cudexperience.com.':'Sign-ups are temporarily paused. Please check back soon, or email contact@cudexperience.com.'
 };
 function setStatus(msg){if(s)s.textContent=msg;}
+/* Join stays disabled (also in the HTML, so it is blocked before this script runs)
+   until the consent box is ticked. Independent of NEWSLETTER_ENABLED below. */
+var consentEl=f.querySelector('[name="consent"]');
+function syncJoin(){
+if(joinBtn&&consentEl)joinBtn.disabled=!consentEl.checked;
+}
+if(consentEl){
+consentEl.addEventListener('change',syncJoin);
+// form.reset() clears the box without firing 'change'; pageshow covers browsers restoring a ticked box on reload/back.
+f.addEventListener('reset',function(){setTimeout(syncJoin,0);});
+window.addEventListener('pageshow',syncJoin);
+syncJoin();
+}
 if(!NEWSLETTER_ENABLED){
 if(joinBtn)joinBtn.setAttribute('aria-disabled','true');
 f.addEventListener('submit',function(e){
