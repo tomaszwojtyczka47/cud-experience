@@ -160,6 +160,21 @@ nextBtn.hidden = !canScroll;
 prevBtn.addEventListener('click', function(){ go(-1); startAutoplay(); });
 nextBtn.addEventListener('click', function(){ go(1); startAutoplay(); });
 
+/* Swipe: a mostly-horizontal drag of 40px+ over the cards moves one card, like the arrows do. */
+var swipeX = 0, swipeY = 0, swiping = false;
+viewport.addEventListener('touchstart', function(e){
+if(e.touches.length !== 1){ swiping = false; return; }
+swipeX = e.touches[0].clientX; swipeY = e.touches[0].clientY; swiping = true; paused = true;
+}, {passive: true});
+viewport.addEventListener('touchend', function(e){
+if(!swiping) return;
+swiping = false;
+var t = e.changedTouches[0];
+var dx = t.clientX - swipeX, dy = t.clientY - swipeY;
+if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3){ go(dx < 0 ? 1 : -1); startAutoplay(); }
+}, {passive: true});
+viewport.addEventListener('touchcancel', function(){ swiping = false; }, {passive: true});
+
 root.addEventListener('mouseenter', function(){ paused = true; });
 root.addEventListener('mouseleave', function(){ paused = false; });
 root.addEventListener('focusin', function(){ paused = true; });
