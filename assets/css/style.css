@@ -66,6 +66,45 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,[
 .cud-nav ul a{font-size:13px}
 .cud-nav ul a.on{padding:10px calc(18px - .16em) 10px 18px}
 }
+
+/* ---- HERO NAV: "Experiences" dropdown (home pages, desktop only) ---------
+   Opens on hover and on keyboard focus, closes on Esc (site.js). Hidden on the
+   hamburger layout, where the full-screen menu stays exactly as it was. */
+.cud-sub{display:none}
+@media (min-width:821px){
+.cud-has-sub{position:relative;padding:14px 0;margin:-14px 0}
+.cud-has-sub>a::after{content:'';display:inline-block;width:4px;height:4px;margin:0 0 3px .9em;border:solid currentColor;border-width:0 1px 1px 0;transform:rotate(45deg);transition:transform .35s cubic-bezier(.22,.8,.3,1)}
+.cud-nav .cud-has-sub:hover>a,.cud-nav .cud-has-sub:has(:focus-visible)>a{border-color:rgba(255,255,255,.85)}
+.cud-nav .cud-has-sub:hover>a::after,.cud-nav .cud-has-sub:has(:focus-visible)>a::after{transform:translateY(2px) rotate(225deg)}
+.cud-sub{display:block;position:absolute;top:100%;left:-24px;z-index:6;width:318px;background:rgba(20,17,13,.93);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12);box-shadow:0 26px 50px -14px rgba(0,0,0,.6);visibility:hidden;opacity:0;pointer-events:none;transform:translateY(-8px);clip-path:inset(0 -50px 100% -50px);transition:opacity .2s ease .12s,transform .32s cubic-bezier(.22,.8,.3,1) .12s,clip-path .32s cubic-bezier(.22,.8,.3,1) .12s,visibility 0s linear .44s}
+.cud-nav .cud-has-sub:hover .cud-sub,.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub{visibility:visible;opacity:1;pointer-events:auto;transform:none;clip-path:inset(0 -50px -70px -50px);transition-delay:0s}
+.cud-nav .cud-has-sub.cud-sub-off .cud-sub{visibility:hidden;opacity:0;pointer-events:none;transform:translateY(-8px);clip-path:inset(0 -50px 100% -50px);transition-delay:.12s,.12s,.12s,.44s}
+.cud-nav .cud-sub .cud-sub-row{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:16px;padding:13px 24px;color:#fff;text-decoration:none;text-transform:none;letter-spacing:0;font-size:13px;opacity:0;text-shadow:none;border:0;border-top:1px solid rgba(255,255,255,.08);transform:translateY(-5px);transition:opacity .22s ease,transform .3s cubic-bezier(.22,.8,.3,1),background-color .2s ease}
+.cud-nav .cud-sub .cud-sub-row:first-child{border-top:0}
+.cud-nav .cud-has-sub:hover .cud-sub-row,.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row{opacity:1;transform:none}
+.cud-nav .cud-has-sub:hover .cud-sub-row:nth-child(1),.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row:nth-child(1){transition-delay:.04s,.04s,0s}
+.cud-nav .cud-has-sub:hover .cud-sub-row:nth-child(2),.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row:nth-child(2){transition-delay:.08s,.08s,0s}
+.cud-nav .cud-has-sub:hover .cud-sub-row:nth-child(3),.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row:nth-child(3){transition-delay:.12s,.12s,0s}
+.cud-nav .cud-has-sub:hover .cud-sub-row:nth-child(4),.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row:nth-child(4){transition-delay:.16s,.16s,0s}
+.cud-nav .cud-has-sub:hover .cud-sub-row:nth-child(5),.cud-nav .cud-has-sub:has(:focus-visible) .cud-sub-row:nth-child(5){transition-delay:.2s,.2s,0s}
+.cud-nav .cud-has-sub.cud-sub-off .cud-sub-row{opacity:0;transform:translateY(-5px);transition-delay:0s}
+.cud-nav .cud-sub a.cud-sub-row:hover,.cud-nav .cud-sub a.cud-sub-row:focus-visible{background:rgba(255,255,255,.09)}
+.cud-nav .cud-sub a.cud-sub-row:focus-visible{outline:1px solid rgba(255,255,255,.75);outline-offset:-5px}
+.cud-sub-tx{display:flex;flex-direction:column;min-width:0}
+.cud-sub-name{font-family:var(--serif);font-size:20px;line-height:1.15;letter-spacing:.02em;transition:transform .3s cubic-bezier(.22,.8,.3,1)}
+.cud-sub-meta{margin-top:5px;font-size:9.5px;line-height:1.3;letter-spacing:.16em;text-transform:uppercase;opacity:.62}
+.cud-sub-go{position:relative;width:20px;height:9px;opacity:0;transform:translateX(-8px);transition:opacity .25s ease,transform .3s cubic-bezier(.22,.8,.3,1)}
+.cud-sub-go::before{content:'';position:absolute;left:0;right:1px;top:4px;height:1px;background:currentColor}
+.cud-sub-go::after{content:'';position:absolute;right:1px;top:1px;width:6px;height:6px;border:solid currentColor;border-width:1px 1px 0 0;transform:rotate(45deg) translate(-1px,1px)}
+.cud-nav .cud-sub a.cud-sub-row:hover .cud-sub-go,.cud-nav .cud-sub a.cud-sub-row:focus-visible .cud-sub-go{opacity:.9;transform:none}
+.cud-nav .cud-sub a.cud-sub-row:hover .cud-sub-name,.cud-nav .cud-sub a.cud-sub-row:focus-visible .cud-sub-name{transform:translateX(4px)}
+.cud-nav .cud-sub .cud-sub-soon{cursor:default;color:rgba(255,255,255,.66)}
+.cud-sub-soon .cud-sub-meta{opacity:.8}
+.cud-sub-tag{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;border:1px solid rgba(255,255,255,.26);padding:4px calc(8px - .16em) 4px 8px}
+.cud-nav .cud-sub .cud-sub-all{padding:14px 24px;border-top:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04)}
+.cud-sub-all .cud-sub-name{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.cud-nav .cud-sub a.cud-sub-all .cud-sub-go{opacity:.7;transform:none}
+}
 .cud-hero-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 24px 90px}
 .cud-hr{width:140px;height:1px;background:rgba(255,255,255,.55);border:0;margin:28px auto 22px}
 .cud-hero-claim{font-family:var(--serif);font-size:clamp(19px,2.2vw,25px);line-height:1.55;letter-spacing:.05em;margin:0 0 30px;text-shadow:0 2px 22px rgba(0,0,0,.5)}
@@ -513,4 +552,5 @@ html{scroll-behavior:auto}
 .cud-hero-bg img,.cud-close .cud-ph img{animation:none}
 .cud-ev,.cud-ev-img img,.cud-ev-lock,.cud-ev-lock-ic,.cud-ev-b h3,.cud-ev-b h2,.cud-card,.cud-card:before,.cud-card .cud-ph img,.cud-card .cud-ic,.cud-pil,.cud-pic,.cud-feat,.cud-feat-ic,.cud-ft-ic a,.cud-ft-nav a,.cud-pv-link,.cud-pv-nav ul a,.cud-lang-lt a,.cud-input,.cud-textarea,.cud-space,.cud-space-ph img,.cud-space-car-btn,.cud-skip,.cud-btn,.cud-nav ul a,.cud-logo-h,.cud-nl-join,.cud-jrl-track,.cud-jrl-card-in,.cud-jrl-btn{transition:none}
 .cud-menu-btn span,.cud-menu-btn span::before,.cud-menu-btn span::after{transition:none}
+.cud-sub,.cud-sub-row,.cud-sub-name,.cud-sub-go,.cud-has-sub>a::after{transition:none!important}
 }
