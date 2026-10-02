@@ -1,7 +1,3 @@
-/* C.U.D. Origins application form — submits to the Cloudflare Worker at
-   /api/apply (same origin, no CORS/CSP changes needed). Field ids below
-   map 1:1 onto the Airtable column names the Worker expects — keep both
-   in sync if a question is ever added, removed or reworded. */
 (function () {
   var form = document.querySelector('.cud-form');
   if (!form) return;
@@ -55,7 +51,6 @@
     if (errorBox) errorBox.classList.remove('is-visible');
 
     if (form.querySelector('[name="website"]').value) {
-      // Honeypot filled -> silently pretend success, never call the API.
       window.location.href = 'thank-you/';
       return;
     }

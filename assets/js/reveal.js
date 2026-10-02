@@ -1,12 +1,3 @@
-/* ---- LOADER ------------------------------------------------------------
-   The C.U.D. mark overlay is for slow loads only. It stays invisible (CSS)
-   and a page that is ready quickly never shows it - the overlay is simply
-   removed. It is switched on only when the photos of the first screen (the
-   hero, or any image that is mostly in view) are still arriving SHOW_AFTER
-   ms after the navigation began, and then stays up until they are in. Once
-   shown it stays at least MIN_VISIBLE ms so it never just flashes, and at
-   most MAX_VISIBLE ms so a stalled request never traps a visitor. Without
-   JavaScript, or with prefers-reduced-motion, it is never shown. -------- */
 (function(){
 var loader = document.getElementById('cud-loader');
 if(!loader) return;
@@ -15,9 +6,6 @@ if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').ma
 loader.remove();
 return;
 }
-/* 2s: on the connections measured (Wi-Fi, LTE, 4G, even a throttled slow-4G
-   phone) the hero is in within ~0.1-1.5s, so only a clearly slow load
-   reaches it. */
 var SHOW_AFTER = 2000;
 var MIN_VISIBLE = 600;
 var MAX_VISIBLE = 2500;
@@ -48,9 +36,6 @@ var wait = shownAt ? MIN_VISIBLE - (Date.now() - shownAt) : 0;
 if(wait > 0){ setTimeout(finish, wait); } else { finish(); }
 };
 
-/* "Ready" means the photos the visitor sees first are in, not the window
-   load event: load also waits for analytics, the consent banner and every
-   lazy image already requested. */
 var vw = window.innerWidth || root.clientWidth;
 var vh = window.innerHeight || root.clientHeight;
 var onFirstScreen = function(img){
@@ -85,10 +70,6 @@ if(delay > 0){ showTimer = setTimeout(show, delay); } else { show(); }
 }
 })();
 
-/* ---- SCROLL REVEAL -----------------------------------------------------
-   Sections fade/rise into place as they near the viewport, the same
-   IntersectionObserver pattern already used for photo loading and GA4
-   section_view tracking. Skipped for prefers-reduced-motion. ------------ */
 (function(){
 var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(!reduceMotion && 'IntersectionObserver' in window){

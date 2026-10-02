@@ -183,18 +183,34 @@ def experience_items(text: str, lang: str) -> list[tuple[str, str]]:
     return items
 
 
+JOURNAL_BLOCK_RE = re.compile(r"<div\b[^>]*\bdata-journal-fallback\b[^>]*>")
+
+
+def journal_block(text: str) -> str | None:
+    """The <div data-journal-fallback> element written by scripts/sync-journal.py, or None."""
+    m = JOURNAL_BLOCK_RE.search(text)
+    if not m:
+        return None
+    depth = 0
+    for tag in re.finditer(r"<div\b|</div>", text[m.start():]):
+        depth += -1 if tag.group(0).startswith("</") else 1
+        if depth == 0:
+            return text[m.start():m.start() + tag.end()]
+    return None
+
+
 def journal_posts(text: str) -> list[dict]:
-    """Posts pre-rendered by scripts/sync-journal.py between the journal-feed markers.
+    """Posts pre-rendered by scripts/sync-journal.py in the data-journal-fallback block.
     Besides title/date/excerpt, each card carries the blog's own author and image
     (data-* attributes); a post without them simply has no such field."""
-    m = re.search(r"<!-- journal-feed:start.*?-->(.*?)<!-- journal-feed:end -->", text, re.S)
-    if not m:
+    block = journal_block(text)
+    if block is None:
         return []
     body_re = re.compile(
         r'<span class="cud-jrl-date">(?:<time datetime="([^"]*)">)?.*?</span>'
         r'<span class="cud-jrl-h">(.*?)</span><span class="cud-jrl-ex">(.*?)</span>', re.S)
     posts = []
-    for attrs, inner in re.findall(r'<a class="cud-jrl-card"([^>]*)>(.*?)</a>', m.group(1), re.S):
+    for attrs, inner in re.findall(r'<a class="cud-jrl-card"([^>]*)>(.*?)</a>', block, re.S):
         a = {k: html.unescape(v) for k, v in re.findall(r'([\w-]+)="([^"]*)"', attrs)}
         b = body_re.search(inner)
         if not a.get("href") or not b:

@@ -1,20 +1,7 @@
-/* Seven Private Spaces (experiences/hoi-an/): per-room photo carousels
-   (scroll-snap, buttons are a progressive enhancement over native
-   touch/trackpad scroll) plus a shared <dialog> that opens with the
-   full photo set, description and price for the clicked room. Content
-   is read straight from each card's own markup (including the hidden
-   .cud-space-loc/.cud-space-full text) so translations stay entirely
-   in the HTML - this file has no room-specific strings in it. */
 (function(){
 var dialog = document.querySelector('.cud-room-dialog');
 if(!dialog) return;
 
-/* scroll-snap-type + scrollBy({behavior:'smooth'}) don't reliably play
-   together across engines - the snap target can win the tug-of-war
-   before the smooth animation finishes, leaving the track stuck at its
-   start position. Scrolling instantly (still fast, still resolves
-   fine at scroll-snap boundaries) is what's actually reliable, so
-   there's nothing left here to skip under prefers-reduced-motion. */
 function wireCarousel(root){
 var track = root.querySelector('.cud-space-car-track');
 var prev = root.querySelector('.cud-space-car-prev');
@@ -59,8 +46,6 @@ dialogTrack.innerHTML = '';
 card.querySelectorAll('.cud-space-car-slide').forEach(function(s){
 dialogTrack.appendChild(s.cloneNode(true));
 });
-/* The card photos are small (sizes="340px"); in the dialog they are shown
-   larger, so tell the browser to pick a bigger file from the same srcset. */
 dialogTrack.querySelectorAll('source').forEach(function(src){
 src.sizes = '(min-width: 980px) 450px, (min-width: 701px) 46vw, 92vw';
 });
@@ -88,10 +73,6 @@ openRoom(card, openBtn);
 });
 });
 
-/* Cleanup runs directly from whatever actually closed the dialog
-   rather than from the dialog's own 'close' event - that event does
-   not reliably fire in every environment, and losing the body scroll
-   unlock because of it would leave the page stuck non-scrollable. */
 function finishClose(){
 document.body.style.overflow = '';
 if(lastTrigger){ var t = lastTrigger; lastTrigger = null; t.focus(); }

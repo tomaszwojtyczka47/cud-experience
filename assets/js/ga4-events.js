@@ -1,8 +1,3 @@
-/* ---- GA4 EVENTS -----------------------------------------------------
-   One-page site, so page views say almost nothing: every visit is one
-   view. These events record what people actually do - which buttons
-   they press, which trips they open, how far down they get. They ride
-   on the same gtag the consent script above installs. --------------- */
 (function(){
 function ev(n,p){ if(typeof window.gtag==='function'){ window.gtag('event',n,p||{}); } }
 function txt(el){ return el ? (el.textContent||'').replace(/\s+/g,' ').trim().slice(0,60) : ''; }
