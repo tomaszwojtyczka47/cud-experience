@@ -87,6 +87,12 @@ setStatus(MSG.err);
 });
 });
 }
+})();
+
+/* Kept in its own function on purpose: the newsletter block above returns early
+   while sign-up is paused, and that return must never skip the code below
+   (it once left the mobile menu dead on both home pages). */
+(function(){
 /* Copyright year keeps itself current without ever needing an edit. */
 var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
