@@ -149,29 +149,3 @@ io.observe(widget);
 load();
 }
 })();
-
-/* Google tag (GA4). The library used to be an async <script> in <head> on
-   every page: ~180 KB and about 0.4 s of main-thread work during the first
-   seconds of a visit. The inline gtag() calls in each page still queue their
-   commands in dataLayer, so nothing is lost; the library itself loads on the
-   visitor's first interaction (scroll, tap, key press), or 8 s after the
-   page finished loading if they only read. */
-(function(){
-/* Pages that must count every visit (the thank-you pages) keep a plain
-   <script async> tag for the library, and then there is nothing to defer. */
-if(document.querySelector('script[src*="googletagmanager.com/gtag/js"]'))return;
-var started=false;
-var events=['pointerdown','keydown','scroll','touchstart','wheel'];
-function start(){
-if(started)return;
-started=true;
-events.forEach(function(e){window.removeEventListener(e,start);});
-var s=document.createElement('script');
-s.async=true;
-s.src='https://www.googletagmanager.com/gtag/js?id=G-SQ21EGMK7H';
-document.head.appendChild(s);
-}
-events.forEach(function(e){window.addEventListener(e,start,{passive:true});});
-function arm(){setTimeout(start,8000);}
-if(document.readyState==='complete'){arm();}else{window.addEventListener('load',arm);}
-})();
