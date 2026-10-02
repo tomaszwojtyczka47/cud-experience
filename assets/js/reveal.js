@@ -1,6 +1,6 @@
 /* ---- LOADER + SCROLL REVEAL --------------------------------------------
    Loader: the C.U.D. mark stays on screen (CSS shows it from first paint,
-   no flash) until the window's load event fires, then fades out - capped
+   no flash) until the hero photo has loaded, then fades out - capped
    at 2.5s so a slow connection never traps a visitor behind it, and never
    shown for less than ~500ms so it doesn't just flicker on a fast one.
    Scroll reveal: sections fade/rise into place as they near the viewport,
@@ -32,10 +32,16 @@ var hideRespectingMinimum = function(){
 var elapsed = Date.now() - shownAt;
 if(elapsed >= minVisible){ hide(); } else { setTimeout(hide, minVisible - elapsed); }
 };
-if(document.readyState === 'complete'){
+/* "Ready" means the hero photo is in (pages without one are ready at once),
+   not the window load event: load also waits for analytics, the consent
+   banner and every lazy image already requested, which on a phone kept the
+   loader up for the full maxWait. */
+var heroImg = document.querySelector('.cud-hero-bg img');
+if(!heroImg || heroImg.complete){
 hideRespectingMinimum();
 } else {
-window.addEventListener('load', hideRespectingMinimum);
+heroImg.addEventListener('load', hideRespectingMinimum);
+heroImg.addEventListener('error', hideRespectingMinimum);
 }
 setTimeout(hide, maxWait);
 }
