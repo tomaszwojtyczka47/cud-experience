@@ -1,0 +1,58 @@
+name: IndexNow
+
+# After every GitHub Pages deployment, tell Bing (and the other IndexNow search
+# engines) which pages changed, so they re-crawl them sooner. Google ignores
+# IndexNow. See scripts/indexnow.py. No secrets: the key is a public file in the
+# repository root.
+#
+# Triggered by the Pages deployment that follows a push to main (including the
+# daily Journal sync). Manual run: Actions > IndexNow > Run workflow, tick the
+# box to send every page in sitemap.xml (use once after this workflow is added).
+
+on:
+  workflow_run:
+    # The Pages workflow is listed under two names (its API name and its run name).
+    workflows: ["pages build and deployment", "pages-build-deployment"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      all_pages:
+        description: "Send every page in sitemap.xml instead of only the last commit's changes"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || 'main' }}
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # GitHub's CDN can serve the previous version of a page for a few minutes
+      # after a deployment; give it time so the crawler sees the new one.
+      - name: Wait for the deployment to reach the CDN
+        run: sleep 240
+
+      - name: Send the changed pages to IndexNow
+        env:
+          ALL_PAGES: ${{ inputs.all_pages }}
+        run: |
+          if [ "$ALL_PAGES" = "true" ]; then
+            python3 scripts/indexnow.py --all
+          else
+            python3 scripts/indexnow.py --changed-between HEAD^ HEAD
+          fi
