@@ -98,6 +98,7 @@ var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
 
 /* Mobile nav: hamburger toggles the existing <ul> as a full-screen menu. */
+var NAV_MQ='(min-width:961px)';
 var navs=document.querySelectorAll('.cud-nav');
 navs.forEach(function(nav){
 var btn=nav.querySelector('.cud-menu-btn');
@@ -118,6 +119,14 @@ a.addEventListener('click',closeMenu);
 document.addEventListener('keydown',function(e){
 if(e.key==='Escape')closeMenu();
 });
+/* Rotating a tablet (or widening the window) past the hamburger breakpoint (see style.css) must not
+   leave the menu "open" with the page scroll locked behind it. Keep NAV_MQ in step with the CSS. */
+if(window.matchMedia){
+var wide=window.matchMedia(NAV_MQ);
+var onWide=function(e){if(e.matches)closeMenu();};
+if(wide.addEventListener)wide.addEventListener('change',onWide);
+else if(wide.addListener)wide.addListener(onWide);
+}
 });
 })();
 
