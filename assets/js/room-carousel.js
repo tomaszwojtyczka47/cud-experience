@@ -59,6 +59,11 @@ dialogTrack.innerHTML = '';
 card.querySelectorAll('.cud-space-car-slide').forEach(function(s){
 dialogTrack.appendChild(s.cloneNode(true));
 });
+/* The card photos are small (sizes="340px"); in the dialog they are shown
+   larger, so tell the browser to pick a bigger file from the same srcset. */
+dialogTrack.querySelectorAll('source').forEach(function(src){
+src.sizes = '(min-width: 980px) 450px, (min-width: 701px) 46vw, 92vw';
+});
 dialogTrack.scrollLeft = 0;
 dialogNo.textContent = text(card, '.cud-space-no');
 dialogLoc.textContent = text(card, '.cud-space-loc');

@@ -120,3 +120,32 @@ if(e.key==='Escape')closeMenu();
 });
 });
 })();
+
+/* Cloudflare Turnstile (the bot check under the newsletter / application
+   forms) used to load from <head> on every visit, although nobody sees the
+   widget until they scroll down to the form. It now loads when the widget
+   is about to come into view, or the moment someone focuses a form field. */
+(function(){
+var widget=document.querySelector('.cf-turnstile');
+if(!widget)return;
+var started=false;
+function load(){
+if(started)return;
+started=true;
+var s=document.createElement('script');
+s.src='https://challenges.cloudflare.com/turnstile/v0/api.js';
+s.async=true;
+s.defer=true;
+document.head.appendChild(s);
+}
+var form=widget.closest('form');
+if(form)form.addEventListener('focusin',load);
+if('IntersectionObserver' in window){
+var io=new IntersectionObserver(function(entries){
+if(entries.some(function(en){return en.isIntersecting;})){io.disconnect();load();}
+},{rootMargin:'400px 0px'});
+io.observe(widget);
+}else{
+load();
+}
+})();
