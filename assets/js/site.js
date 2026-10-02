@@ -121,6 +121,24 @@ if(e.key==='Escape')closeMenu();
 });
 })();
 
+/* Home-page "Experiences" dropdown. CSS alone opens it on hover and keyboard focus;
+   this only adds Esc-to-dismiss and re-arms it once pointer and focus have left.
+   Own function so nothing here can interfere with the shared nav code above. */
+(function(){
+var item=document.querySelector('.cud-nav .cud-has-sub');
+if(!item)return;
+var link=item.firstElementChild;
+function active(){return item.matches(':hover')||item.contains(document.activeElement);}
+function rearm(){setTimeout(function(){if(!active())item.classList.remove('cud-sub-off');},0);}
+document.addEventListener('keydown',function(e){
+if(e.key!=='Escape'||!active())return;
+item.classList.add('cud-sub-off');
+if(link&&document.activeElement!==link&&item.contains(document.activeElement))link.focus();
+});
+item.addEventListener('mouseleave',rearm);
+item.addEventListener('focusout',rearm);
+})();
+
 /* Cloudflare Turnstile (the bot check under the newsletter / application
    forms) used to load from <head> on every visit, although nobody sees the
    widget until they scroll down to the form. It now loads when the widget
