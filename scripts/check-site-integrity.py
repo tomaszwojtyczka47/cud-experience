@@ -42,6 +42,7 @@ import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
+from datetime import date
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -517,6 +518,16 @@ def check_jsonld() -> None:
                 declared = sorted(str(o.get("price")) for o in offers)
                 if visible and visible != declared:
                     err(f"{rel}: Event offer prices {declared} differ from the visible room prices {visible}")
+                # The meta description quotes "from N PLN" / "od N PLN": it must stay the lowest room price.
+                meta_desc = re.search(r'<meta name="description" content="([^"]*)"', text)
+                quoted = re.search(r"\b(?:from|od)\s+(\d[\d,\u00a0 ]*\d)\s*PLN",
+                                   html.unescape(meta_desc.group(1))) if meta_desc else None
+                if quoted and declared and re.sub(r"\D", "", quoted.group(1)) != str(min(int(d) for d in declared)):
+                    err(f"{rel}: the meta description says 'from {quoted.group(1)} PLN' but the lowest room price is {min(int(d) for d in declared)} PLN")
+                # After the offer window closes the page still says "Applications open"; nudge, don't fail CI.
+                through = max((o.get("validThrough", "") for o in offers), default="")[:10]
+                if through and through < date.today().isoformat():
+                    warn(f"{rel}: the offers ran until {through}; update 'Applications open' (Hoi An pages and experience cards), the offers and llms.txt")
             if "FAQPage" in types:
                 declared_q = [q.get("name") for q in n.get("mainEntity", [])]
                 visible_q = [visible_text(q) for q in FAQ_ITEM_RE.findall(text)]

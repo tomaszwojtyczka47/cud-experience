@@ -75,11 +75,12 @@ ORG_TYPE = "Organization"
 LANG = {
     "en": {
         "prefix": "",
-        "org_desc": "Small-group slow travel experiences and tailor-made journeys in Bali, Vietnam and Cambodia, built around real conversations, local culture and unhurried days.",
+        "org_desc": "C.U.D. Experience (short for \u201cCurated Human Experiences\u201d) is a small, independent slow-travel brand created and curated by Piotr Pawe\u0142 Kami\u0144ski. It designs and hosts small-group experiences in Asia (Vietnam, Indonesia, Cambodia), built around real conversations, local culture and unhurried days. Its first experience, C.U.D. Origins\u2122, takes place in Hoi An, Vietnam, in March 2027 for a maximum of nine guests.",
         "slogan": "Travel slower. Feel deeper. Return to yourself.",
         "knows": ["slow travel", "experiences in Asia", "curated journeys"],
         "root_crumb": "C.U.D. Experience",
         "founder_title": "Founder & Curator",
+        "founder_desc": "Founder and curator of C.U.D. Experience, who designs and personally hosts its small-group experiences.",
         "event_desc": "Eleven days of slow travel in Hoi An, Vietnam — local culture, quiet mornings and real connection.",
         "trip_desc": "A private human experience for 9 people: 10 nights in a private riverside sanctuary in Hoi An, Vietnam, 20–30 March 2027.",
         "trip_types": ["Solo travellers", "Couples"],
@@ -89,11 +90,12 @@ LANG = {
     },
     "pl": {
         "prefix": "pl/",
-        "org_desc": "Kameralne podróże slow travel i szyte na miarę wyprawy po Bali, Wietnamie i Kambodży, zbudowane wokół prawdziwych rozmów, lokalnej kultury i dni bez pośpiechu.",
+        "org_desc": "C.U.D. Experience („Curated Human Experiences”) to mała, niezależna marka slow travel, stworzona i prowadzona przez Piotra Pawła Kamińskiego. Projektuje i prowadzi kameralne doświadczenia w Azji (Wietnam, Indonezja, Kambodża), oparte na prawdziwych rozmowach, lokalnej kulturze i dniach bez pośpiechu. Jej pierwsze doświadczenie, C.U.D. Origins™, odbędzie się w Hoi An w Wietnamie w marcu 2027 dla maksymalnie dziewięciu gości.",
         "slogan": "Podróżuj wolniej. Czuj głębiej. Wróć do siebie.",
         "knows": ["slow travel", "doświadczenia w Azji", "podróże szyte na miarę"],
         "root_crumb": "C.U.D. Experience",
         "founder_title": "Założyciel i Kurator",
+        "founder_desc": "Założyciel i kurator C.U.D. Experience, który projektuje i osobiście prowadzi jego kameralne doświadczenia.",
         "event_desc": "Jedenaście dni slow travel w Hoi An w Wietnamie — lokalna kultura, ciche poranki i prawdziwe relacje.",
         "trip_desc": "Prywatne, ludzkie doświadczenie dla 9 osób: 10 nocy w prywatnej oazie nad rzeką w Hoi An w Wietnamie, 20–30 marca 2027.",
         "trip_types": ["Osoby podróżujące solo", "Pary"],
@@ -217,7 +219,7 @@ def org_node(lang: str) -> dict:
         "@type": ORG_TYPE,
         "@id": ORG_ID,
         "name": "C.U.D. Experience",
-        "alternateName": "Curated Human Experiences",
+        "alternateName": ["Curated Human Experiences", "CUD Experience"],
         "url": f"{BASE}/",
         "logo": {"@type": "ImageObject", "@id": LOGO_ID, "url": f"{BASE}/android-chrome-512x512.png",
                  "width": 512, "height": 512, "caption": "C.U.D. Experience"},
@@ -242,7 +244,8 @@ def website_node() -> dict:
 
 def founder_node(lang: str) -> dict:
     return {"@type": "Person", "@id": FOUNDER_ID, "name": "Piotr Paweł Kamiński",
-            "jobTitle": LANG[lang]["founder_title"], "worksFor": {"@id": ORG_ID}}
+            "jobTitle": LANG[lang]["founder_title"], "description": LANG[lang]["founder_desc"],
+            "url": page_url(lang, "about/") + "#founder", "worksFor": {"@id": ORG_ID}}
 
 
 def hoian_nodes(text: str, lang: str, url: str) -> list[dict]:
