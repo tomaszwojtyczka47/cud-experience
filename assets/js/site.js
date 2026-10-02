@@ -98,7 +98,7 @@ var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
 
 /* Mobile nav: hamburger toggles the existing <ul> as a full-screen menu. */
-var navs=document.querySelectorAll('.cud-nav, .cud-pv-nav');
+var navs=document.querySelectorAll('.cud-nav');
 navs.forEach(function(nav){
 var btn=nav.querySelector('.cud-menu-btn');
 if(!btn)return;
@@ -121,7 +121,7 @@ if(e.key==='Escape')closeMenu();
 });
 })();
 
-/* Home-page "Experiences" dropdown. CSS alone opens it on hover and keyboard focus;
+/* Navbar "Experiences" dropdown (every page). CSS alone opens it on hover and keyboard focus;
    this only adds Esc-to-dismiss and re-arms it once pointer and focus have left.
    Own function so nothing here can interfere with the shared nav code above. */
 (function(){

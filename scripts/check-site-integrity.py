@@ -24,6 +24,9 @@ Checks, across every checked-in HTML page:
      groups; llms.txt follows the llmstxt.org shape, its internal links resolve
      and every price it quotes appears on the Hoi An page.
 
+  7. Navbar: every page's navbar and its "Experiences" dropdown match what
+     scripts/sync-navbar.py generates (run that script to fix).
+
 Exit code is non-zero if any check finds a problem, so this is meant to run
 in CI (see .github/workflows/site-integrity.yml).
 
@@ -663,6 +666,20 @@ def check_journal_feed() -> None:
 
 
 # ---------------------------------------------------------------------------
+# 7. Navbar / Experiences dropdown in sync on every page
+# ---------------------------------------------------------------------------
+
+def check_navbar_sync() -> None:
+    res = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "sync-navbar.py"), "--check"],
+        capture_output=True, text=True,
+    )
+    if res.returncode != 0:
+        for line in (res.stdout + res.stderr).strip().splitlines():
+            err(line)
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> int:
     check_sitemap_lastmod()
@@ -673,6 +690,7 @@ def main() -> int:
     check_robots_txt()
     check_llms_txt()
     check_journal_feed()
+    check_navbar_sync()
 
     if warnings:
         print(f"--- {len(warnings)} warning(s) ---")
