@@ -1,6 +1,3 @@
-/* Newsletter sign-up: temporarily disabled (backend not ready yet).
-   Submits to the Cloudflare Worker at /api/newsletter once re-enabled;
-   see worker/newsletter.js for the receiving side and required secrets. */
 (function(){
 var NEWSLETTER_ENABLED=false;
 var f=document.querySelector('.cud-nl-form');
@@ -15,15 +12,12 @@ turnstile:isPl?'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.':'Plea
 disabled:isPl?'Zapisy chwilowo wstrzymane. Wróć niebawem albo napisz na contact@cudexperience.com.':'Sign-ups are temporarily paused. Please check back soon, or email contact@cudexperience.com.'
 };
 function setStatus(msg){if(s)s.textContent=msg;}
-/* Join stays disabled (also in the HTML, so it is blocked before this script runs)
-   until the consent box is ticked. Independent of NEWSLETTER_ENABLED below. */
 var consentEl=f.querySelector('[name="consent"]');
 function syncJoin(){
 if(joinBtn&&consentEl)joinBtn.disabled=!consentEl.checked;
 }
 if(consentEl){
 consentEl.addEventListener('change',syncJoin);
-// form.reset() clears the box without firing 'change'; pageshow covers browsers restoring a ticked box on reload/back.
 f.addEventListener('reset',function(){setTimeout(syncJoin,0);});
 window.addEventListener('pageshow',syncJoin);
 syncJoin();
@@ -41,7 +35,6 @@ e.preventDefault();
 setStatus('');
 var websiteEl=f.querySelector('[name="website"]');
 if(websiteEl&&websiteEl.value){
-// Honeypot filled -> silently pretend success, never call the API.
 setStatus(MSG.ok);
 f.reset();
 return;
@@ -89,15 +82,10 @@ setStatus(MSG.err);
 }
 })();
 
-/* Kept in its own function on purpose: the newsletter block above returns early
-   while sign-up is paused, and that return must never skip the code below
-   (it once left the mobile menu dead on both home pages). */
 (function(){
-/* Copyright year keeps itself current without ever needing an edit. */
 var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
 
-/* Mobile nav: hamburger toggles the existing <ul> as a full-screen menu. */
 var NAV_MQ='(min-width:961px)';
 var navs=document.querySelectorAll('.cud-nav');
 navs.forEach(function(nav){
@@ -119,8 +107,6 @@ a.addEventListener('click',closeMenu);
 document.addEventListener('keydown',function(e){
 if(e.key==='Escape')closeMenu();
 });
-/* Rotating a tablet (or widening the window) past the hamburger breakpoint (see style.css) must not
-   leave the menu "open" with the page scroll locked behind it. Keep NAV_MQ in step with the CSS. */
 if(window.matchMedia){
 var wide=window.matchMedia(NAV_MQ);
 var onWide=function(e){if(e.matches)closeMenu();};
@@ -130,9 +116,6 @@ else if(wide.addListener)wide.addListener(onWide);
 });
 })();
 
-/* Navbar "Experiences" dropdown (every page). CSS alone opens it on hover and keyboard focus;
-   this only adds Esc-to-dismiss and re-arms it once pointer and focus have left.
-   Own function so nothing here can interfere with the shared nav code above. */
 (function(){
 var item=document.querySelector('.cud-nav .cud-has-sub');
 if(!item)return;
@@ -148,10 +131,6 @@ item.addEventListener('mouseleave',rearm);
 item.addEventListener('focusout',rearm);
 })();
 
-/* Cloudflare Turnstile (the bot check under the newsletter / application
-   forms) used to load from <head> on every visit, although nobody sees the
-   widget until they scroll down to the form. It now loads when the widget
-   is about to come into view, or the moment someone focuses a form field. */
 (function(){
 var widget=document.querySelector('.cf-turnstile');
 if(!widget)return;

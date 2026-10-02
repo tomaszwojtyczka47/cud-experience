@@ -26,6 +26,8 @@ Checks, across every checked-in HTML page:
 
   7. Navbar: every page's navbar and its "Experiences" dropdown match what
      scripts/sync-navbar.py generates (run that script to fix).
+  8. No code comments in anything the browser receives (HTML, CSS, JS), so DevTools
+     shows none (run scripts/strip-comments.py to fix).
 
 Exit code is non-zero if any check finds a problem, so this is meant to run
 in CI (see .github/workflows/site-integrity.yml).
@@ -622,8 +624,7 @@ def check_llms_txt() -> None:
 # ---------------------------------------------------------------------------
 
 JOURNAL_PAGES = ("journal/index.html", "pl/journal/index.html")
-JOURNAL_START_RE = re.compile(r"<!-- journal-feed:start\b[^>]*-->")
-JOURNAL_END = "<!-- journal-feed:end -->"
+JOURNAL_BLOCK_RE = re.compile(r"<div\b[^>]*\bdata-journal-fallback\b[^>]*>")
 JOURNAL_CARD_RE = re.compile(r'<a class="cud-jrl-card" href="([^"]*)"([^>]*)>')
 JOURNAL_TIME_RE = re.compile(r'<time datetime="([^"]*)"')
 JOURNAL_FULL_STAMP_RE = re.compile(r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:Z|[+-]\d\d:\d\d)$")
@@ -638,23 +639,25 @@ def check_journal_feed() -> None:
         if not path.exists():
             continue
         text = read(path)
-        starts = JOURNAL_START_RE.findall(text)
-        if not starts and JOURNAL_END not in text:
+        opens = JOURNAL_BLOCK_RE.findall(text)
+        if not opens:
             warn(f"{rel}: no pre-rendered Journal block (scripts/sync-journal.py has not run yet)")
             continue
-        if len(starts) != 1 or text.count(JOURNAL_END) != 1:
-            err(f"{rel}: expected exactly one journal-feed:start and one journal-feed:end marker")
+        if len(opens) != 1:
+            err(f"{rel}: expected exactly one data-journal-fallback element, found {len(opens)}")
             continue
-        a = JOURNAL_START_RE.search(text).end()
-        b = text.index(JOURNAL_END)
-        if b < a:
-            err(f"{rel}: journal-feed markers are in the wrong order")
+        a = JOURNAL_BLOCK_RE.search(text).start()
+        depth = 0
+        b = None
+        for tag in re.finditer(r"<div\b|</div>", text[a:]):
+            depth += -1 if tag.group(0).startswith("</") else 1
+            if depth == 0:
+                b = a + tag.end()
+                break
+        if b is None:
+            err(f"{rel}: unbalanced <div> in the Journal block")
             continue
         block = text[a:b]
-        if block.count("data-journal-fallback") != 1:
-            err(f"{rel}: Journal block must contain exactly one data-journal-fallback element")
-        if block.count("<div") != block.count("</div>"):
-            err(f"{rel}: unbalanced <div> inside the Journal block")
         cards = JOURNAL_CARD_RE.findall(block)
         if not cards:
             err(f"{rel}: Journal block has no post cards")
@@ -691,6 +694,22 @@ def check_navbar_sync() -> None:
 
 
 # ---------------------------------------------------------------------------
+# 8. No comments in the served page code
+# ---------------------------------------------------------------------------
+
+def check_no_comments() -> None:
+    """Comments in HTML, CSS and JS are visible to anyone in DevTools; the site ships without them."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("strip_comments", ROOT / "scripts" / "strip-comments.py")
+    strip_comments = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(strip_comments)
+    for path in strip_comments.served_files():
+        for line, snippet in strip_comments.comments_in(path):
+            err(f"{path.relative_to(ROOT)}:{line}: code comment '{snippet}' (run python3 scripts/strip-comments.py)")
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> int:
     check_sitemap_lastmod()
@@ -702,6 +721,7 @@ def main() -> int:
     check_llms_txt()
     check_journal_feed()
     check_navbar_sync()
+    check_no_comments()
 
     if warnings:
         print(f"--- {len(warnings)} warning(s) ---")

@@ -1,15 +1,3 @@
-/* Journal carousel (journal/index.html, pl/journal/index.html) — fetches
-   the Worker-proxied TravelPixieFreak feed (see worker/journal.js) and
-   renders it as an auto-advancing, looping carousel. The feed request
-   passes ?lang= based on the page's <html lang>, so the English page
-   gets the "Shades of Human Life" category and the Polish page gets the
-   separate "Odcienie Ludzkiego Życia" category (see worker/journal.js
-   for the two feed URLs). If the fetch fails or returns no items, the
-   page's existing static "First stories coming soon" panel is left
-   exactly as-is — this file never touches it unless real articles are
-   available. Card text is inserted via textContent (not innerHTML): the
-   feed is third-party content, so it's treated as untrusted data, never
-   as markup. */
 (function(){
 var root = document.querySelector('[data-journal-carousel]');
 var fallback = document.querySelector('[data-journal-fallback]');
@@ -26,7 +14,7 @@ return r.json();
 var items = (data && data.items) || [];
 if(!items.length) return;
 build(items);
-}).catch(function(){ /* leave the static fallback panel untouched */ });
+}).catch(function(){});
 
 function truncate(s, n){
 if(!s) return '';
@@ -88,20 +76,10 @@ items.forEach(function(item){ track.appendChild(makeCard(item)); });
 
 var index = 0;
 var cardWidth = 0;
-var maxIndex = 0; // last index that still shows a full row of real cards - see measure()
+var maxIndex = 0;
 var paused = false;
 var timer = null;
 
-/* The CSS shows 1/2/3 cards at once depending on breakpoint
-   (.cud-jrl-card is 100%/50%/33.3333% wide - see style.css). Stepping
-   the index all the way to n-1 like a single-card carousel would, on
-   a 3-per-view layout, leave the last 1-2 slots trailing off the end
-   of the track with nothing to show - real, reported bug: after the
-   final real card ("Shades of Human Life #4" in the current 10-item
-   feed) the following slide(s) render blank instead of wrapping.
-   maxIndex stops advancing once one more step would no longer have a
-   full row of real cards behind it, so every position the carousel
-   can reach is always fully populated. */
 function measure(){
 cardWidth = track.children[0].getBoundingClientRect().width;
 var perView = cardWidth ? Math.max(1, Math.round(viewport.getBoundingClientRect().width / cardWidth)) : 1;
@@ -113,20 +91,11 @@ function setPosition(animate){
 track.style.transition = animate ? '' : 'none';
 track.style.transform = 'translateX(' + (-index * cardWidth) + 'px)';
 if(!animate){
-void track.offsetHeight; // force reflow so the next move re-enables the transition
+void track.offsetHeight;
 track.style.transition = '';
 }
 }
 
-/* Wraps at maxIndex/0 (the real usable range - see measure()) rather
-   than n-1/0, so the carousel never scrolls past the last full row of
-   real cards. The wrapping move (last position back to first, or
-   first back to last) jumps instantly instead of animating, since
-   sliding the CSS transform the "short way" across the wrap wouldn't
-   traverse the real cards in between - it would either jump
-   immediately (no animation to skip) or, if forced to animate,
-   visibly race backward across the whole strip. An instant cut once
-   per lap reads as an intentional loop point rather than a glitch. */
 function go(dir){
 if(maxIndex <= 0) return;
 var wrapping = (dir > 0 && index >= maxIndex) || (dir < 0 && index <= 0);
@@ -147,10 +116,6 @@ function stopAutoplay(){
 if(timer){ clearInterval(timer); timer = null; }
 }
 
-/* maxIndex depends on how many cards fit per view, which changes
-   across the 1/2/3-per-view breakpoints - so whether prev/next make
-   sense at all can change on resize too (e.g. all 10 cards might fit
-   in one row on a very wide screen). */
 function updateNavVisibility(){
 var canScroll = maxIndex > 0;
 prevBtn.hidden = !canScroll;
@@ -160,7 +125,6 @@ nextBtn.hidden = !canScroll;
 prevBtn.addEventListener('click', function(){ go(-1); startAutoplay(); });
 nextBtn.addEventListener('click', function(){ go(1); startAutoplay(); });
 
-/* Swipe: a mostly-horizontal drag of 40px+ over the cards moves one card, like the arrows do. */
 var swipeX = 0, swipeY = 0, swiping = false;
 viewport.addEventListener('touchstart', function(e){
 if(e.touches.length !== 1){ swiping = false; return; }
@@ -182,14 +146,6 @@ root.addEventListener('focusout', function(){ paused = false; });
 
 window.addEventListener('resize', function(){ measure(); setPosition(false); updateNavVisibility(); startAutoplay(); });
 
-/* Un-hide first, then measure: getBoundingClientRect() on a card that's
-   still inside a hidden ancestor always reports 0 width (a [hidden]
-   subtree isn't rendered), and a requestAnimationFrame callback is the
-   wrong way to sequence around that - rAF is paused for backgrounded
-   tabs (e.g. a link opened in a new background tab), which would leave
-   the carousel permanently hidden behind the fallback panel for that
-   visitor. Reading layout geometry forces a synchronous reflow on its
-   own, so no rAF/timeout is needed here at all. */
 root.hidden = false;
 if(fallback) fallback.hidden = true;
 measure();
