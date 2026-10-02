@@ -7,7 +7,8 @@ Checks, across every checked-in HTML page:
   1. sitemap.xml <lastmod> vs. each page's actual last-changed date in git.
   2. CSP <meta> script-src 'sha256-...' hashes vs. the real hashes of each
      page's inline <script> blocks (excluding application/ld+json, which
-     CSP does not restrict, and non-inline scripts that carry a src=).
+     CSP does not restrict, and non-inline scripts that carry a src=); the
+     CSP must also allow the Cloudflare Web Analytics beacon hosts.
   3. Internal links/assets (href, src, srcset) resolve to a real file, and
      in-page #fragment links resolve to a real id= on the target page.
   4. EN/PL structural parity: every hreflang="en"/"pl" pair that the pages
@@ -180,7 +181,7 @@ ATTR_RE = re.compile(r'([a-zA-Z-]+)\s*=\s*"([^"]*)"')
 SHA256_RE = re.compile(r"'sha256-([A-Za-z0-9+/=]+)'")
 
 
-def csp_script_src_hashes(csp: str) -> set[str]:
+def csp_directives(csp: str) -> dict[str, str]:
     directives = {}
     for chunk in csp.split(";"):
         chunk = chunk.strip()
@@ -188,8 +189,11 @@ def csp_script_src_hashes(csp: str) -> set[str]:
             continue
         name, *rest = chunk.split(None, 1)
         directives[name] = rest[0] if rest else ""
-    script_src = directives.get("script-src", "")
-    return set(SHA256_RE.findall(script_src))
+    return directives
+
+
+def csp_script_src_hashes(csp: str) -> set[str]:
+    return set(SHA256_RE.findall(csp_directives(csp).get("script-src", "")))
 
 
 def compute_inline_script_hashes(html_text: str) -> set[str]:
@@ -223,6 +227,15 @@ def check_csp_hashes() -> None:
             err(f"{rel}: inline <script> hash 'sha256-{h}' is not in the CSP script-src (script will be blocked)")
         for h in sorted(unused):
             warn(f"{rel}: CSP declares 'sha256-{h}' but no inline <script> matches it (stale hash)")
+        # Cloudflare injects its Web Analytics beacon into every proxied page;
+        # without these two hosts the browser blocks it and nothing is counted.
+        # (Redirect stubs use a locked-down "default-src 'none'" policy.)
+        directives = csp_directives(csp)
+        if "'self'" in directives.get("script-src", ""):
+            if "https://static.cloudflareinsights.com" not in directives.get("script-src", "").split():
+                err(f"{rel}: CSP script-src does not allow https://static.cloudflareinsights.com (Cloudflare Web Analytics beacon is blocked)")
+            if "https://cloudflareinsights.com" not in directives.get("connect-src", "").split():
+                err(f"{rel}: CSP connect-src does not allow https://cloudflareinsights.com (Cloudflare Web Analytics cannot send data)")
 
 
 # ---------------------------------------------------------------------------
