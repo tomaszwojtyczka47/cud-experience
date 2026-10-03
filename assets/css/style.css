@@ -160,6 +160,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,[
 }
 
 .cud-about{padding:74px 0}
+.cud-about-eyebrow{color:#8a5a2b}
 .cud-about-in{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
 .cud-about-img{aspect-ratio:4/3;min-height:230px}
 @media (max-width:900px){.cud-about-in{grid-template-columns:1fr;gap:30px}.cud-about-img{min-height:0}}
