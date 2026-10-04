@@ -58,7 +58,7 @@ dialogDesc.textContent = text(card, '.cud-space-full');
 dialogFeat.textContent = text(card, '.cud-space-feat');
 dialogMeta.textContent = text(card, '.cud-space-meta');
 dialogPrice.innerHTML = card.querySelector('.cud-space-price') ? card.querySelector('.cud-space-price').innerHTML : '';
-document.body.style.overflow = 'hidden';
+document.documentElement.style.overflow = 'hidden';
 dialog.showModal();
 }
 
@@ -74,7 +74,7 @@ openRoom(card, openBtn);
 });
 
 function finishClose(){
-document.body.style.overflow = '';
+document.documentElement.style.overflow = '';
 if(lastTrigger){ var t = lastTrigger; lastTrigger = null; t.focus(); }
 }
 
