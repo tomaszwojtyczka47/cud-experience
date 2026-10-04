@@ -94,12 +94,12 @@ if(!btn)return;
 function closeMenu(){
 nav.classList.remove('cud-nav-open');
 btn.setAttribute('aria-expanded','false');
-document.body.style.overflow='';
+document.documentElement.style.overflow='';
 }
 btn.addEventListener('click',function(){
 var open=nav.classList.toggle('cud-nav-open');
 btn.setAttribute('aria-expanded',open?'true':'false');
-document.body.style.overflow=open?'hidden':'';
+document.documentElement.style.overflow=open?'hidden':'';
 });
 nav.querySelectorAll('ul a').forEach(function(a){
 a.addEventListener('click',closeMenu);
