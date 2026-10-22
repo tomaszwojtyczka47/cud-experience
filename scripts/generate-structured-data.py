@@ -52,6 +52,9 @@ OFFER_VALID_FROM = "2026-09-04"
 OFFER_VALID_THROUGH = "2026-11-30T23:59:59+01:00"
 
 INSTAGRAM = "https://www.instagram.com/cudexperience/"
+LINKEDIN = "https://www.linkedin.com/in/piotr-kaminski-pl/"
+# Public Facebook page "Travel Pixie Freak - Zdrowie & Podróże" (the founder's blog), not a C.U.D. brand page.
+FACEBOOK = "https://www.facebook.com/profile.php?id=61568446023846"
 
 # Verified sameAs targets (Wikidata / Wikipedia / UNESCO pages checked 2026-10-01).
 COUNTRIES = [
@@ -264,7 +267,8 @@ def website_node() -> dict:
 def founder_node(lang: str) -> dict:
     return {"@type": "Person", "@id": FOUNDER_ID, "name": "Piotr Paweł Kamiński",
             "jobTitle": LANG[lang]["founder_title"], "description": LANG[lang]["founder_desc"],
-            "url": page_url(lang, "about/") + "#founder", "worksFor": {"@id": ORG_ID}}
+            "url": page_url(lang, "about/") + "#founder", "worksFor": {"@id": ORG_ID},
+            "sameAs": [LINKEDIN, FACEBOOK]}
 
 
 def hoian_nodes(text: str, lang: str, url: str) -> list[dict]:
