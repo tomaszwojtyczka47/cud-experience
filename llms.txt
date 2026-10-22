@@ -4,7 +4,7 @@
 
 Key facts:
 - Positioning: "Travel slower. Feel deeper. Return to yourself." C.U.D. is not about escaping your life; it is about returning to yourself.
-- Three ways to experience C.U.D.: C.U.D. Experiences (small-group experiences in Asia), the C.U.D. Collection (stays and places personally visited and curated) and C.U.D. Private Journeys (tailor-made travel).
+- Three ways to experience C.U.D.: C.U.D. Experiences (small-group experiences in Asia), The C.U.D. Collection (places across Asia that Piotr has personally visited and selected) and C.U.D. Private Journeys (individually designed journeys across Asia). Piotr personally designs and curates journeys around the people travelling.
 - Status: cudexperience.com is an informational website. According to its Terms of Use it is not a travel agency, tour operator or booking platform, and applying through the site does not create a booking; any arrangement for an actual trip is a separate, personal agreement with Piotr.
 - If this file and a linked page ever disagree, the page is correct.
 
@@ -13,6 +13,11 @@ Key facts:
 - [C.U.D. Hoi An Experience (C.U.D. Origins™ Founding Edition)](https://cudexperience.com/experiences/hoi-an/): the open experience. 20–30 March 2027, 10 nights, 9 guests maximum, in a private riverside sanctuary with tropical gardens close to Hoi An. Seven private sleeping spaces (five rooms in the main villa, two private cottages for two), prices, what is included, who it is for and 14 FAQ answers.
 - [Apply to join the Hoi An experience](https://cudexperience.com/experiences/hoi-an/apply/): application form. Every application is read personally by Piotr.
 - [All experiences](https://cudexperience.com/experiences/): Hoi An is open; C.U.D. Bali Experience (September 2027), C.U.D. Surf & Ride Bali (June 2027) and C.U.D. Kampot (December 2027) are announced, with details and dates still being finalised.
+
+## The Collection and Private Journeys
+
+- [The C.U.D. Collection](https://cudexperience.com/collection/): "Places worth travelling for." A growing, personal selection of boutique hotels, villas, guesthouses and hideaways across Asia that Piotr has personally visited, experienced and selected for genuine hospitality, a sense of place, thoughtful details, local connection and meaningful memories. It is not a ranking and not a list of the most luxurious places in Asia. The collection grows slowly, only when a place feels right.
+- [C.U.D. Private Journeys](https://cudexperience.com/private-journeys/): "Asia, personally designed around you." Individually designed journeys across Asia, personally curated by Piotr around the people travelling, the way they want to travel and what they want to experience. There is no fixed itinerary and no standard package; each journey begins with a conversation. Private Journeys are individually quoted based on destination, duration, style of travel and level of curation. They will be available soon; enquiries go to contact@cudexperience.com.
 
 ## Hoi An facts (C.U.D. Origins™ Founding Edition)
 
@@ -29,7 +34,7 @@ Key facts:
 - [Philosophy](https://cudexperience.com/philosophy/): the five pillars (slow living, human connection, local culture, meaningful experiences, returning to yourself).
 - [About C.U.D.](https://cudexperience.com/about/): why C.U.D. exists.
 - [Journal](https://cudexperience.com/journal/): "Shades of Human Life", stories and reflections. The latest entries are loaded by script and published on travelpixiefreak.com (https://travelpixiefreak.com/category/shades-of-human-life/).
-- [Contact](https://cudexperience.com/contact/): contact@cudexperience.com for experiences, partnerships and the C.U.D. Collection. Instagram: https://www.instagram.com/cudexperience/
+- [Contact](https://cudexperience.com/contact/): contact@cudexperience.com for experiences, partnerships, the C.U.D. Collection and C.U.D. Private Journeys. Instagram: https://www.instagram.com/cudexperience/
 
 ## Polski (Polish edition)
 
@@ -37,6 +42,8 @@ Key facts:
 - [Hoi An Experience](https://cudexperience.com/pl/experiences/hoi-an/): 20–30 marca 2027, 9 gości, prywatna oaza nad rzeką, ceny, zakres, FAQ.
 - [Aplikuj na Hoi An](https://cudexperience.com/pl/experiences/hoi-an/apply/): formularz zgłoszeniowy.
 - [Experiences](https://cudexperience.com/pl/experiences/): lista doświadczeń.
+- [The C.U.D. Collection](https://cudexperience.com/pl/collection/): rosnący, osobisty wybór butikowych hoteli, willi, pensjonatów i kryjówek w Azji, które osobiście odwiedził i wybrał Piotr.
+- [C.U.D. Private Journeys](https://cudexperience.com/pl/private-journeys/): indywidualnie projektowane podróże po Azji, osobiście dobierane przez Piotra wokół osób, które w nie wyruszają. Wkrótce dostępne.
 - [Filozofia](https://cudexperience.com/pl/philosophy/), [O C.U.D.](https://cudexperience.com/pl/about/), [Journal](https://cudexperience.com/pl/journal/), [Kontakt](https://cudexperience.com/pl/contact/).
 
 ## Optional

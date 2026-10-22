@@ -3,9 +3,9 @@
 
 Two kinds of navbar exist:
 
-* HERO navbar (white text on a photo): the home pages and the Hoi An page. It is
-  written by hand in the HTML; this script only keeps its "Experiences" dropdown
-  in sync.
+* HERO navbar (white text on a photo): the home pages, the Hoi An page, Collection
+  and Private Journeys. It is written by hand in the HTML; this script only keeps
+  its "Experiences" dropdown and the Collection / Private Journeys links in sync.
 * LIGHT navbar (class "cud-nav cud-nav-lt", ink text on the sand background): every
   other page (About, Philosophy, Journal, Contact, Experiences, the Hoi An
   application and thank-you pages, Privacy, Terms). Same logo, links, language
@@ -51,14 +51,16 @@ ROWS = {
 
 # Navbar labels per language: (section dir, label). Experiences is the dropdown.
 LABELS = {
-    "en": {"aria": "Primary", "philosophy": "Philosophy", "journal": "Journal", "about": "About C.U.D.",
-           "contact": "Contact", "apply": "Apply"},
-    "pl": {"aria": "G&oacute;wna", "philosophy": "Filozofia", "journal": "Journal", "about": "O C.U.D.",
-           "contact": "Kontakt", "apply": "Aplikuj"},
+    "en": {"aria": "Primary", "collection": "Collection", "journeys": "Private Journeys", "philosophy": "Philosophy",
+           "journal": "Journal", "about": "About C.U.D.", "contact": "Contact", "apply": "Apply"},
+    "pl": {"aria": "G&oacute;wna", "collection": "Collection", "journeys": "Private Journeys", "philosophy": "Filozofia",
+           "journal": "Journal", "about": "O C.U.D.", "contact": "Kontakt", "apply": "Aplikuj"},
 }
 
 HERO_NAV_RE = re.compile(r'<nav class="cud-nav"[^>]*>.*?</nav>', re.S)
 LIGHT_NAV_RE = re.compile(r'<nav class="cud-nav cud-nav-lt"[^>]*>.*?</nav>\n', re.S)
+SECTION_LINKS_RE = re.compile(
+    r'\n<li><a href="[^"]*"(?: aria-current="page")?>(?:Collection|Private Journeys)</a></li>')
 ITEM_RE = re.compile(
     r'<li(?: class="cud-has-sub")?><a href="([^"]*)"((?: aria-current="page")?)>Experiences</a>'
     r'(?:\n<div class="cud-sub">.*?</div>)?</li>',
@@ -109,6 +111,19 @@ def dropdown_item(rel_page: str, link_href: str, link_attrs: str) -> str:
     return "\n".join(out)
 
 
+def section_links(rel_page: str) -> list[str]:
+    lang = lang_of(rel_page)
+    L = LABELS[lang]
+    page_dir = os.path.dirname(rel_page)
+    root = "pl/" if lang == "pl" else ""
+    out = []
+    for section, label in (("collection", L["collection"]), ("private-journeys", L["journeys"])):
+        target = root + section
+        cur = ' aria-current="page"' if page_dir == target else ""
+        out.append(f'<li><a href="{href_to(page_dir, target)}"{cur}>{label}</a></li>')
+    return out
+
+
 def logo_svg() -> str:
     m = LOGO_RE.search((ROOT / "index.html").read_text(encoding="utf-8"))
     if not m:
@@ -152,6 +167,7 @@ def light_navbar(rel_page: str, text: str, logo: str) -> str:
         "</a>",
         "<ul>",
         dropdown_item(rel_page, href_to(page_dir, exp_dir), exp_cur),
+        *section_links(rel_page),
         link("philosophy", L["philosophy"]),
         link("journal", L["journal"]),
         link("about", L["about"]),
@@ -173,10 +189,11 @@ def sync_page(path: Path, logo: str) -> tuple[str, str] | None:
 
     hero = HERO_NAV_RE.search(text)
     if hero:  # hand-written hero navbar: only keep its dropdown in sync
-        block = hero.group(0)
+        block = SECTION_LINKS_RE.sub("", hero.group(0))
         if len(ITEM_RE.findall(block)) != 1:
             raise SystemExit(f"{rel}: expected exactly one Experiences item in the navbar")
-        block = ITEM_RE.sub(lambda m: dropdown_item(rel, m.group(1), m.group(2)), block)
+        block = ITEM_RE.sub(
+            lambda m: "\n".join([dropdown_item(rel, m.group(1), m.group(2)), *section_links(rel)]), block)
         return text, text[: hero.start()] + block + text[hero.end():]
 
     if not LIGHT_NAV_RE.search(text):
