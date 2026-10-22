@@ -86,7 +86,7 @@ setStatus(MSG.err);
 var y=document.getElementById('cud-year');
 if(y){y.textContent=new Date().getFullYear();}
 
-var NAV_MQ='(min-width:961px)';
+var NAV_MQ='(min-width:1181px)';
 var navs=document.querySelectorAll('.cud-nav');
 navs.forEach(function(nav){
 var btn=nav.querySelector('.cud-menu-btn');
