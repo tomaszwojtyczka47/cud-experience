@@ -33,6 +33,7 @@ Key facts:
 - [Home](https://cudexperience.com/): overview of the brand, its philosophy and upcoming 2027 experiences.
 - [Philosophy](https://cudexperience.com/philosophy/): the five pillars (slow living, human connection, local culture, meaningful experiences, returning to yourself).
 - [About C.U.D.](https://cudexperience.com/about/): why C.U.D. exists.
+- [What Is Slow Travel?](https://cudexperience.com/slow-travel/): a short guide to slow travel in Asia: what it is, how to start, and how C.U.D. approaches it (Polish: [Czym jest slow travel?](https://cudexperience.com/pl/slow-travel/)).
 - [Journal](https://cudexperience.com/journal/): "Shades of Human Life", stories and reflections. The latest entries are loaded by script and published on travelpixiefreak.com (https://travelpixiefreak.com/category/shades-of-human-life/).
 - [Contact](https://cudexperience.com/contact/): contact@cudexperience.com for experiences, partnerships, the C.U.D. Collection and C.U.D. Private Journeys. Instagram: https://www.instagram.com/cudexperience/
 
@@ -44,6 +45,7 @@ Key facts:
 - [Experiences](https://cudexperience.com/pl/experiences/): lista doświadczeń.
 - [The C.U.D. Collection](https://cudexperience.com/pl/collection/): rosnący, osobisty wybór butikowych hoteli, willi, pensjonatów i kryjówek w Azji, które osobiście odwiedził i wybrał Piotr.
 - [C.U.D. Private Journeys](https://cudexperience.com/pl/private-journeys/): indywidualnie projektowane podróże po Azji, osobiście dobierane przez Piotra wokół osób, które w nie wyruszają. Wkrótce dostępne.
+- [Czym jest slow travel?](https://cudexperience.com/pl/slow-travel/): krótki przewodnik po slow travel w Azji.
 - [Filozofia](https://cudexperience.com/pl/philosophy/), [O C.U.D.](https://cudexperience.com/pl/about/), [Journal](https://cudexperience.com/pl/journal/), [Kontakt](https://cudexperience.com/pl/contact/).
 
 ## Optional
