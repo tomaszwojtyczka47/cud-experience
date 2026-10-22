@@ -6,7 +6,7 @@ var isPl=(document.documentElement.lang||'').toLowerCase().indexOf('pl')===0;
 var s=document.querySelector('.cud-nl-status');
 var joinBtn=f.querySelector('.cud-nl-join');
 var MSG={
-ok:isPl?'Dziękujemy! Zostałeś zapisany.':'Thanks! You’re on the list.',
+ok:isPl?'Dziękuję! Jesteś na liście.':'Thanks! You’re on the list.',
 err:isPl?'Coś poszło nie tak. Spróbuj ponownie za chwilę albo napisz na contact@cudexperience.com.':'Something went wrong. Please try again shortly, or email contact@cudexperience.com.',
 turnstile:isPl?'Potwierdź, że nie jesteś robotem, i spróbuj ponownie.':'Please confirm you’re not a robot and try again.',
 disabled:isPl?'Zapisy chwilowo wstrzymane. Wróć niebawem albo napisz na contact@cudexperience.com.':'Sign-ups are temporarily paused. Please check back soon, or email contact@cudexperience.com.'
