@@ -115,6 +115,7 @@ PAGES = [
     {"path": "", "type": "WebPage", "crumbs": [], "about_org": True},
     {"path": "about/", "type": "AboutPage", "crumbs": [("about/", {"en": "About C.U.D.", "pl": "O C.U.D."})], "about_org": True},
     {"path": "philosophy/", "type": "WebPage", "crumbs": [("philosophy/", {"en": "Philosophy", "pl": "Filozofia"})], "about_org": True},
+    {"path": "slow-travel/", "type": "WebPage", "crumbs": [("slow-travel/", {"en": "What Is Slow Travel?", "pl": "Czym jest slow travel?"})], "about_org": True, "faq": True},
     {"path": "journal/", "type": "CollectionPage", "crumbs": [("journal/", {"en": "Journal", "pl": "Journal"})], "journal_feed": True},
     {"path": "contact/", "type": "ContactPage", "crumbs": [("contact/", {"en": "Contact", "pl": "Kontakt"})], "about_org": True},
     {"path": "privacy/", "type": "WebPage", "crumbs": [("privacy/", {"en": "Privacy Policy", "pl": "Polityka Prywatności"})]},
@@ -397,6 +398,15 @@ def build_graph(page: dict, lang: str, text: str) -> list[dict]:
                     post["image"] = {"@type": "ImageObject", **p["image"]}
                 items.append({"@type": "ListItem", "position": i, "item": post})
             web["mainEntity"] = {"@type": "ItemList", "@id": f"{url}#posts", "itemListElement": items}
+    if page.get("faq"):
+        faq = faq_items(text)
+        if faq:
+            graph.append({
+                "@type": "FAQPage", "@id": f"{url}#faq",
+                "isPartOf": {"@id": f"{url}#webpage"}, "inLanguage": lang,
+                "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+                               for q, a in faq],
+            })
     if page.get("hoian"):
         web["mainEntity"] = {"@id": EVENT_ID}
         web["about"] = [{"@id": TRIP_ID}, {"@id": DEST_ID}]
