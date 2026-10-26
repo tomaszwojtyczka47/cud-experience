@@ -1,0 +1,20 @@
+name: Probe seohost SSH port
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/probe-seohost.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Look for the SSH and FTP port of h69.seohost.pl
+        run: |
+          for port in 21 22 2222 7822 2200 2020 22222 21098 1022 8022 2022 2122; do
+            printf 'port %s: ' "$port"
+            timeout 10 bash -c "exec 3<>/dev/tcp/h69.seohost.pl/$port && read -t 6 line <&3 && echo \"\$line\"" 2>/dev/null || echo "no answer"
+          done
