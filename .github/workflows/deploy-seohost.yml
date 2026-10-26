@@ -1,0 +1,105 @@
+name: Deploy to seohost
+
+# Uploads the site to the seohost.pl server (DirectAdmin account srv101551, host
+# h69.seohost.pl) over SSH with rsync. Runs after every push to main (including the
+# daily Journal sync, which starts it with `gh workflow run`) and on demand
+# (Actions > Deploy to seohost > Run workflow; tick "dry_run" to only list what
+# would be uploaded).
+#
+# What is uploaded is decided by scripts/build-site.py: every tracked file except
+# the maintainer files, plus deploy/htaccess as .htaccess. Nothing is ever deleted
+# on the server.
+#
+# Order matters: images, fonts, CSS and JS go first and the pages last. A page that
+# links to style.css?v=NEW must not be public before the new style.css is, or
+# Cloudflare would cache the old file under the new URL for 31 days.
+#
+# Repository secrets (Settings > Secrets and variables > Actions): SSH_PRIVATE_KEY,
+# SSH_HOST, SSH_PORT, SSH_USER. Optional repository variable SEOHOST_REMOTE_DIR
+# overrides the folder below.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only list what would be uploaded, change nothing on the server"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-seohost
+  cancel-in-progress: false
+
+env:
+  REMOTE_DIR: ${{ vars.SEOHOST_REMOTE_DIR || 'domains/cudexperience.com/public_html/' }}
+  SITE_DIR: /tmp/cud-site
+  DRY: ${{ inputs.dry_run && '--dry-run' || '' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: the integrity checker compares sitemap <lastmod>
+          # with each page's last commit date.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check the site before uploading it
+        run: |
+          python3 scripts/check-site-integrity.py
+          python3 scripts/generate-structured-data.py --check
+
+      - name: Build the folder that visitors get
+        run: python3 scripts/build-site.py --out "$SITE_DIR"
+
+      - name: Prepare SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" > ~/.ssh/known_hosts
+          test -s ~/.ssh/known_hosts
+          ssh-keygen -lf ~/.ssh/known_hosts
+
+      - name: Upload images, fonts, CSS and JS first
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -rltz --checksum --omit-dir-times --chmod=D755,F644 $DRY --itemize-changes \
+            --exclude='.htaccess' --exclude='*.html' --exclude='*.xml' --exclude='*.txt' --exclude='*.webmanifest' \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -p $SSH_PORT" \
+            "$SITE_DIR/" "$SSH_USER@$SSH_HOST:$REMOTE_DIR"
+
+      - name: Upload pages, sitemap, robots.txt, llms.txt and .htaccess last
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -rltz --checksum --omit-dir-times --chmod=D755,F644 $DRY --itemize-changes \
+            --include='*/' --include='.htaccess' --include='*.html' --include='*.xml' --include='*.txt' --include='*.webmanifest' --exclude='*' \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -p $SSH_PORT" \
+            "$SITE_DIR/" "$SSH_USER@$SSH_HOST:$REMOTE_DIR"
+
+      - name: Check that the server returns exactly the uploaded files
+        if: ${{ !inputs.dry_run }}
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: python3 scripts/verify-site.py --origin-host "$SSH_HOST" --site-dir "$SITE_DIR"
