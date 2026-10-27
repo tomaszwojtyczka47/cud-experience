@@ -3,3 +3,4 @@
 # no reason to be visible in this public repo. Stays on disk for local
 # Claude Code sessions; never pushed to GitHub.
 CLAUDE.md
+__pycache__/

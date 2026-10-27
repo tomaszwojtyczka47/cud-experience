@@ -17,7 +17,7 @@ Usage:
 
 Only pages that are listed in sitemap.xml are ever sent, so noindex pages (404,
 thank-you pages, redirect stubs) are skipped. Run by .github/workflows/indexnow.yml
-after each GitHub Pages deployment. Stdlib only.
+after each deployment to seohost. Stdlib only.
 """
 from __future__ import annotations
 
