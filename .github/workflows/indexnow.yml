@@ -5,20 +5,21 @@ name: IndexNow
 # IndexNow. See scripts/indexnow.py. No secrets: the key is a public file in the
 # repository root.
 #
-# Triggered by the "Deploy to seohost" workflow that follows a push to main
-# (including the daily Journal sync). Manual run: Actions > IndexNow > Run workflow,
-# tick the box to send every page in sitemap.xml.
+# Started by the last step of the "Deploy to seohost" workflow, with the commit that
+# was deployed (so also after the daily Journal sync). Manual run: Actions > IndexNow >
+# Run workflow, tick the box to send every page in sitemap.xml.
 
 on:
-  workflow_run:
-    workflows: ["Deploy to seohost"]
-    types: [completed]
   workflow_dispatch:
     inputs:
       all_pages:
         description: "Send every page in sitemap.xml instead of only the last commit's changes"
         type: boolean
         default: false
+      sha:
+        description: "Commit whose changed pages are sent (default: the tip of main)"
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -29,12 +30,11 @@ concurrency:
 
 jobs:
   ping:
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha || 'main' }}
+          ref: ${{ inputs.sha || 'main' }}
           fetch-depth: 2
 
       - uses: actions/setup-python@v5

@@ -17,6 +17,10 @@ name: Deploy to seohost
 # Repository secrets (Settings > Secrets and variables > Actions): SSH_PRIVATE_KEY,
 # SSH_HOST, SSH_PORT, SSH_USER. Optional repository variable SEOHOST_REMOTE_DIR
 # overrides the folder below.
+#
+# The last step starts the IndexNow workflow with `gh workflow run`. A workflow_run
+# trigger is not used for that: GitHub does not fire it when this deployment was
+# itself started by another workflow (the daily Journal sync).
 
 on:
   push:
@@ -30,6 +34,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
   group: deploy-seohost
@@ -103,3 +108,9 @@ jobs:
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
         run: python3 scripts/verify-site.py --origin-host "$SSH_HOST" --site-dir "$SITE_DIR"
+
+      - name: Tell Bing which pages changed (IndexNow)
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run indexnow.yml --ref main -f sha="$GITHUB_SHA"
