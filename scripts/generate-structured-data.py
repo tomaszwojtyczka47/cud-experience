@@ -69,8 +69,8 @@ HOIAN_SAMEAS = [
 ]
 HOIAN_OLD_TOWN_SAMEAS = "https://whc.unesco.org/en/list/948/"
 
-# Type used for the site-wide entity. The Terms of Use state the site is not a
-# travel agency / tour operator / booking platform, so "TravelAgency" is
+# Type used for the site-wide entity. The Terms of Use state that no packages,
+# reservations or payments are sold through the site, so "TravelAgency" is
 # deliberately not used here. Change this one constant to switch.
 ORG_TYPE = "Organization"
 
