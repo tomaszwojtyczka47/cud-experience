@@ -69,8 +69,8 @@ HOIAN_SAMEAS = [
 ]
 HOIAN_OLD_TOWN_SAMEAS = "https://whc.unesco.org/en/list/948/"
 
-# Type used for the site-wide entity. The Terms of Use state the site is not a
-# travel agency / tour operator / booking platform, so "TravelAgency" is
+# Type used for the site-wide entity. The Terms of Use state that no packages,
+# reservations or payments are sold through the site, so "TravelAgency" is
 # deliberately not used here. Change this one constant to switch.
 ORG_TYPE = "Organization"
 
@@ -241,6 +241,7 @@ def org_node(lang: str) -> dict:
         "@type": ORG_TYPE,
         "@id": ORG_ID,
         "name": "C.U.D. Experience",
+        "legalName": "C.U.D. Experience LLC",
         "alternateName": ["Curated Human Experiences", "CUD Experience"],
         "url": f"{BASE}/",
         "logo": {"@type": "ImageObject", "@id": LOGO_ID, "url": f"{BASE}/android-chrome-512x512.png",
@@ -251,7 +252,8 @@ def org_node(lang: str) -> dict:
                          "email": "contact@cudexperience.com", "availableLanguage": ["English", "Polish"]},
         "sameAs": [INSTAGRAM],
         "founder": {"@id": FOUNDER_ID},
-        "address": {"@type": "PostalAddress", "addressCountry": "PL"},
+        "address": {"@type": "PostalAddress", "streetAddress": "75 E 3rd St", "addressLocality": "Sheridan",
+                    "addressRegion": "WY", "postalCode": "82801", "addressCountry": "US"},
         "slogan": s["slogan"],
         "description": s["org_desc"],
         "areaServed": [{"@type": "Country", "name": n, "sameAs": same} for n, same in COUNTRIES],
