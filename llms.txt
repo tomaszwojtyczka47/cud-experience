@@ -5,7 +5,7 @@
 Key facts:
 - Positioning: "Travel slower. Feel deeper. Return to yourself." C.U.D. is not about escaping your life; it is about returning to yourself.
 - Three ways to experience C.U.D.: C.U.D. Experiences (small-group experiences in Asia), The C.U.D. Collection (places across Asia that Piotr has personally visited and selected) and C.U.D. Private Journeys (individually designed journeys across Asia). Piotr personally designs and curates journeys around the people travelling.
-- Status: cudexperience.com is an informational website. According to its Terms of Use no travel packages, reservations or payments are sold or processed through the site, and applying does not create a booking; any arrangement for an actual trip is a separate agreement made directly with C.U.D. Experience LLC.
+- Status: cudexperience.com is an informational website; no bookings or payments are taken through it yet, and sending an enquiry or an application does not create a booking. According to its Terms & Conditions, an agreement for a C.U.D. Experience or a C.U.D. Private Journey is concluded only after C.U.D. Experience LLC has issued an individual Offer, the client has accepted it and C.U.D. Experience LLC has confirmed the order.
 - Legal entity: cudexperience.com is operated by C.U.D. Experience LLC, a limited liability company registered in the State of Wyoming, USA (Wyoming Secretary of State filing ID 2026-002114725), whose sole member and managing director is Piotr Paweł Kamiński. Contact: contact@cudexperience.com.
 - If this file and a linked page ever disagree, the page is correct.
 
@@ -52,5 +52,5 @@ Key facts:
 ## Optional
 
 - [Privacy Policy](https://cudexperience.com/privacy/): how personal data, cookies and Google Analytics are handled (Polish: [Polityka Prywatności](https://cudexperience.com/pl/privacy/)).
-- [Terms of Use](https://cudexperience.com/terms/): what the site is, copyright and legal notice (Polish: [Regulamin](https://cudexperience.com/pl/terms/)).
+- [Terms & Conditions](https://cudexperience.com/terms/): terms for C.U.D. Experiences and C.U.D. Private Journeys (enquiries, offers, payments, cancellation, liability) and for using the website (Polish: [Regulamin](https://cudexperience.com/pl/terms/)).
 - [Sitemap](https://cudexperience.com/sitemap.xml): every indexable page in English and Polish, with image captions.
