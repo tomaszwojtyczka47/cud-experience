@@ -69,9 +69,8 @@ HOIAN_SAMEAS = [
 ]
 HOIAN_OLD_TOWN_SAMEAS = "https://whc.unesco.org/en/list/948/"
 
-# Type used for the site-wide entity. The Terms of Use state that no packages,
-# reservations or payments are sold through the site, so "TravelAgency" is
-# deliberately not used here. Change this one constant to switch.
+# Type used for the site-wide entity. "TravelAgency" is deliberately not used
+# here. Change this one constant to switch.
 ORG_TYPE = "Organization"
 
 # --- Per-language strings ----------------------------------------------------
@@ -122,7 +121,7 @@ PAGES = [
     {"path": "journal/", "type": "CollectionPage", "crumbs": [("journal/", {"en": "Journal", "pl": "Journal"})], "journal_feed": True},
     {"path": "contact/", "type": "ContactPage", "crumbs": [("contact/", {"en": "Contact", "pl": "Kontakt"})], "about_org": True},
     {"path": "privacy/", "type": "WebPage", "crumbs": [("privacy/", {"en": "Privacy Policy", "pl": "Polityka Prywatności"})]},
-    {"path": "terms/", "type": "WebPage", "crumbs": [("terms/", {"en": "Terms of Use", "pl": "Regulamin"})]},
+    {"path": "terms/", "type": "WebPage", "crumbs": [("terms/", {"en": "Terms & Conditions", "pl": "Regulamin"})]},
     {"path": "collection/", "type": "CollectionPage", "crumbs": [("collection/", {"en": "The C.U.D. Collection", "pl": "The C.U.D. Collection"})]},
     {"path": "private-journeys/", "type": "WebPage", "crumbs": [("private-journeys/", {"en": "C.U.D. Private Journeys", "pl": "C.U.D. Private Journeys"})]},
     {"path": "experiences/", "type": "CollectionPage", "crumbs": [EXP_CRUMB], "experience_list": True},

@@ -5,7 +5,7 @@
 Key facts:
 - Positioning: "Travel slower. Feel deeper. Return to yourself." C.U.D. is not about escaping your life; it is about returning to yourself.
 - Three ways to experience C.U.D.: C.U.D. Experiences (small-group experiences in Asia), The C.U.D. Collection (places across Asia that Piotr has personally visited and selected) and C.U.D. Private Journeys (individually designed journeys across Asia). Piotr personally designs and curates journeys around the people travelling.
-- Status: cudexperience.com is an informational website. According to its Terms of Use no travel packages, reservations or payments are sold or processed through the site, and applying does not create a booking; any arrangement for an actual trip is a separate agreement made directly with C.U.D. Experience LLC.
+- Status: cudexperience.com is an informational website; no bookings or payments are taken through it yet, and sending an enquiry or an application does not create a booking. According to its Terms & Conditions, an agreement for a C.U.D. Experience or a C.U.D. Private Journey is concluded only after C.U.D. Experience LLC has issued an individual Offer, the client has accepted it and C.U.D. Experience LLC has confirmed the order.
 - Legal entity: cudexperience.com is operated by C.U.D. Experience LLC, a limited liability company registered in the State of Wyoming, USA (Wyoming Secretary of State filing ID 2026-002114725), whose sole member and managing director is Piotr Paweł Kamiński. Contact: contact@cudexperience.com.
 - If this file and a linked page ever disagree, the page is correct.
 
@@ -24,9 +24,9 @@ Key facts:
 
 - Dates and group: 20–30 March 2027; 9 guests plus Piotr. Solo travellers (five of the seven spaces are for one person) and pairs (two cottages) are both welcome.
 - Prices per space in PLN: Presence 19,500; Wonder 19,500; Stillness 20,400; Becoming 18,900; Return 18,900. Per couple: Connection 37,800; Belonging 31,800.
-- Payment: a 30% deposit secures a place and the balance is paid in agreed instalments before departure. Applications close 30 November 2026.
+- Payment: an application is not a booking. After reviewing it, Piotr sends an individual Offer; a place is reserved once availability is confirmed, the Offer is accepted and a booking payment (normally 30% of the price) is made, and the balance is paid by the deadlines stated in the Offer. Cancellation terms are given in the Offer before it is accepted. Applications close 30 November 2026.
 - Included: 10 nights in a private sanctuary, daily breakfast, selected lunches and dinners, a Chef Dining Experience, local culinary experiences, 2 massages, aerial yoga and movement sessions, rice fields and cycling, Hoi An Old Town, local markets, a coconut boat experience, a tea ceremony, curated group experiences, airport transfer, local transport, a C.U.D. Gift Box, photography and film moments, and personal support before and during the journey.
-- Not included: international flights, travel insurance, alcohol and personal spending.
+- Not included: international and domestic flights, visas and entry fees, travel insurance, tips, alcohol, personal spending and anything not listed as included.
 - Getting there: the closest airport is Da Nang International Airport (DAD), about 45 minutes from Hoi An. The full day-by-day itinerary is shared only after an application is accepted.
 
 ## About the brand
@@ -52,5 +52,5 @@ Key facts:
 ## Optional
 
 - [Privacy Policy](https://cudexperience.com/privacy/): how personal data, cookies and Google Analytics are handled (Polish: [Polityka Prywatności](https://cudexperience.com/pl/privacy/)).
-- [Terms of Use](https://cudexperience.com/terms/): what the site is, copyright and legal notice (Polish: [Regulamin](https://cudexperience.com/pl/terms/)).
+- [Terms & Conditions](https://cudexperience.com/terms/): terms for C.U.D. Experiences and C.U.D. Private Journeys (enquiries, offers, payments, cancellation, liability) and for using the website (Polish: [Regulamin](https://cudexperience.com/pl/terms/)).
 - [Sitemap](https://cudexperience.com/sitemap.xml): every indexable page in English and Polish, with image captions.
